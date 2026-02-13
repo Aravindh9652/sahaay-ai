@@ -166,15 +166,3 @@ These files contain detailed information about the project's architecture, desig
 2. Make your changes
 3. Test thoroughly
 4. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License.
-
-## Support
-
-For issues, questions, or suggestions, please contact the development team or open an issue in the repository.
-
----
-
-**Last Updated**: February 2026
