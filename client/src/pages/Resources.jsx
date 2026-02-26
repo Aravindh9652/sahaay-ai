@@ -261,11 +261,12 @@ export default function Resources() {
             animation: 'scaleIn 0.4s ease-out'
           }}>
             <div style={{ width: '100%', height: '500px' }}>
+              {/* Google Maps iframe - API key removed for security. Use environment variable or secure config. */}
               <iframe
                 width="100%"
                 height="100%"
                 frameBorder="0"
-                src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDYWN_3CeD3t1d6tPF5W5v9Z8_K8pV_U4w&q=${userLocation.lat},${userLocation.lng}&zoom=12`}
+                src={`https://www.google.com/maps/embed/v1/place?key=YOUR_GOOGLE_MAPS_API_KEY&q=${userLocation.lat},${userLocation.lng}&zoom=12`}
                 style={{ border: 0 }}
               ></iframe>
             </div>
