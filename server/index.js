@@ -2,19 +2,45 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const path = require('path')
+const connectDB = require('./config/database')
 const aiProvider = require('./services/aiProvider')
 
+// AWS Integration modules - REQUIRED for Bedrock + RAG
+let ragEngine, s3Client, dynamodbClient
+try {
+  ragEngine = require('./aws/ragEngine')
+  s3Client = require('./aws/s3Client')
+  dynamodbClient = require('./aws/dynamodbClient')
+  console.log('[AWS] Integration modules loaded successfully')
+} catch (err) {
+  console.error('[AWS] CRITICAL: AWS modules not available. Please install @aws-sdk packages')
+  process.exit(1)
+}
+
 dotenv.config()
+
+// Connect to database
+connectDB()
+
 const app = express()
 app.use(cors())
 app.use(express.json())
 
-app.get('/', (req, res) => res.json({ ok: true, message: 'SAHAAY server running' }))
+// ==================== HEALTH CHECK ENDPOINTS ====================
+app.get('/', (req, res) => {
+  res.json({
+    ok: true,
+    message: 'SAHAAY server running',
+    timestamp: new Date().toISOString(),
+    uptime: process.uptime()
+  })
+})
 
-// Auth routes
+// ==================== AUTHENTICATION ROUTES ====================
 app.use('/api/auth', require('./routes/auth'))
 
-// AI route
+// ==================== LEGACY AI ROUTES ====================
+// Keep for backward compatibility with existing clients
 app.post('/api/ai/query', async (req, res) => {
   const { query, provider, options } = req.body || {}
   if (!query) return res.status(400).json({ error: 'Missing query' })
@@ -22,17 +48,16 @@ app.post('/api/ai/query', async (req, res) => {
     const r = await aiProvider.handleQuery({ query, provider, options })
     res.json({ ok: true, response: r })
   } catch (err) {
-    console.error(err)
+    console.error('AI query error:', err)
     res.status(500).json({ error: 'AI error' })
   }
 })
 
-// Translation route with comprehensive dictionary and API fallbacks
+// ==================== TRANSLATION ROUTES ====================
 app.post('/api/translate/translate', async (req, res) => {
   const { text, target, source, useAI } = req.body
   if (!text || !target) return res.status(400).json({ error: 'Missing text or target language' })
-  
-  // Comprehensive translation dictionary
+
   const dictionary = {
     'hi': {
       'hello': 'नमस्ते', 'hi': 'नमस्ते', 'hey': 'अरे',
@@ -103,12 +128,12 @@ app.post('/api/translate/translate', async (req, res) => {
       'listen': 'শুনুন', 'speak': 'কথা বলুন', 'translate': 'অনুবাদ করুন'
     }
   }
-  
+
   try {
     const lowerText = text.toLowerCase().trim()
     console.log(`[Translation] Input: "${text}" (${lowerText}), Target: ${target}`)
 
-    // Try exact match in dictionary first (works when user input is English keys)
+    // Try exact match in dictionary first
     if (dictionary[target] && dictionary[target][lowerText]) {
       const result = dictionary[target][lowerText]
       console.log(`[Translation] Exact match found: "${result}"`)
@@ -126,74 +151,8 @@ app.post('/api/translate/translate', async (req, res) => {
       }
     }
 
-    // Determine source(s) to try: either user-specified source, or detected + fallbacks
-    const candidates = []
-    if (source && source !== 'auto') {
-      candidates.push(source)
-    } else {
-      // Heuristic: detect probable source language by Unicode script ranges
-      const detectScript = (s) => {
-        if (/[\u0900-\u097F]/.test(s)) return 'hi'   // Devanagari
-        if (/[\u0B80-\u0BFF]/.test(s)) return 'ta'   // Tamil
-        if (/[\u0C00-\u0C7F]/.test(s)) return 'te'   // Telugu
-        if (/[\u0980-\u09FF]/.test(s)) return 'bn'   // Bengali
-        return null
-      }
-
-      const probable = detectScript(text)
-      if (probable) candidates.push(probable)
-      // add common source languages as fallbacks
-      ['te','hi','ta','bn','en'].forEach(l => { if (!candidates.includes(l)) candidates.push(l) })
-    }
-
-    console.log('[Translation] Source candidates:', candidates)
-
-    // Try MyMemory API with the candidate source languages (best-effort free fallback)
-    for (let src of candidates) {
-      try {
-        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${src}|${target}`
-        const response = await fetch(url)
-        if (response.ok) {
-          const data = await response.json()
-          if (data && data.responseStatus === 200 && data.responseData && data.responseData.translatedText) {
-            const translated = data.responseData.translatedText.trim()
-            if (translated && translated.length > 0 && translated.toLowerCase() !== lowerText) {
-              console.log(`[Translation] MyMemory (${src}->${target}) -> "${translated}"`)
-              return res.json({ translated, language: target, detected: src, provider: 'mymemory' })
-            }
-          }
-        }
-      } catch (apiErr) {
-        console.log(`[Translation] MyMemory ${src}->${target} failed:`, apiErr.message)
-      }
-    }
-
-    // If user requested AI translation (or as a fallback when configured), use OpenAI
-    if (useAI) {
-      if (!process.env.OPENAI_API_KEY) {
-        console.log('[Translation] useAI requested but OPENAI_API_KEY not set')
-      } else {
-        try {
-          let prompt
-          if (source && source !== 'auto') {
-            prompt = `Translate the following text from language code ${source} to language code ${target}. Respond with only the translated text.\n\nText: "${text}"`
-          } else {
-            prompt = `Detect the source language and translate the following text into language code ${target}. Respond with only the translated text.\n\nText: "${text}"`
-          }
-          const aiResp = await aiProvider.handleQuery({ query: prompt, provider: 'openai', options: { model: process.env.OPENAI_MODEL } })
-          if (aiResp && aiResp.answer) {
-            const aiTranslated = aiResp.answer.trim()
-            console.log('[Translation] OpenAI translation ->', aiTranslated)
-            return res.json({ translated: aiTranslated, language: target, detected: source || 'auto', provider: 'openai' })
-          }
-        } catch (aiErr) {
-          console.log('[Translation] OpenAI failed:', aiErr.message)
-        }
-      }
-    }
-
     // Final fallback - return the original text
-    console.log(`[Translation] All methods failed, returning original text`)
+    console.log(`[Translation] No match found, returning original text`)
     return res.json({ translated: text, language: target })
 
   } catch (err) {
@@ -202,5 +161,161 @@ app.post('/api/translate/translate', async (req, res) => {
   }
 })
 
+// ==================== AWS RAG ENDPOINTS (PRIMARY) ====================
+
+// POST /api/aws/query - Government scheme queries with Claude 3 Haiku + RAG
+app.post('/api/aws/query', async (req, res) => {
+  try {
+    const { userId, query, language = 'en', context } = req.body
+
+    if (!userId || !query) {
+      return res.status(400).json({
+        error: 'Missing required fields: userId, query',
+        code: 'INVALID_REQUEST'
+      })
+    }
+
+    console.log(`[AWS RAG] Processing query from ${userId}: "${query.substring(0, 50)}..."`)
+
+    // Process through RAG pipeline
+    const result = await ragEngine.processQuery({
+      userId,
+      query,
+      language,
+      context
+    })
+
+    res.json({
+      ok: true,
+      data: result
+    })
+
+  } catch (error) {
+    console.error('[AWS RAG] Query error:', error)
+    res.status(500).json({
+      error: 'Query processing failed',
+      message: error.message,
+      code: 'RAG_ERROR'
+    })
+  }
+})
+
+// POST /api/aws/query/multilingual - Multilingual queries
+app.post('/api/aws/query/multilingual', async (req, res) => {
+  try {
+    const { userId, query, targetLanguage = 'en' } = req.body
+
+    if (!userId || !query) {
+      return res.status(400).json({
+        error: 'Missing userId or query'
+      })
+    }
+
+    const result = await ragEngine.processMultilingualQuery({
+      userId,
+      query,
+      targetLanguage
+    })
+
+    res.json({
+      ok: true,
+      data: result
+    })
+
+  } catch (error) {
+    console.error('[AWS RAG] Multilingual error:', error)
+    res.status(500).json({
+      error: 'Multilingual query failed',
+      message: error.message
+    })
+  }
+})
+
+// GET /api/aws/health - Health check for all AWS services
+app.get('/api/aws/health', async (req, res) => {
+  try {
+    const health = await ragEngine.healthCheck()
+    res.json({
+      ok: health.healthy,
+      checks: health.checks,
+      timestamp: new Date().toISOString()
+    })
+  } catch (error) {
+    res.status(500).json({
+      ok: false,
+      error: error.message
+    })
+  }
+})
+
+// GET /api/aws/info - Service information and configuration
+app.get('/api/aws/info', (req, res) => {
+  res.json({
+    service: 'SAHAAY AWS Civic AI Assistant',
+    version: '1.0.0',
+    environment: process.env.NODE_ENV || 'development',
+    deployment: 'AWS Lambda + Express',
+    features: {
+      bedrock: 'Claude 3 Haiku for multilingual conversational AI',
+      dynamodb: 'User queries and session storage with TTL',
+      s3: 'Government scheme documents and metadata',
+      rag: 'Retrieval-Augmented Generation pipeline',
+      multilingual: 'Hindi, Tamil, Telugu, Bengali, English (5 languages)'
+    },
+    aws: {
+      region: process.env.AWS_REGION || 'us-east-1',
+      bedrockModel: process.env.BEDROCK_MODEL_ID || 'anthropic.claude-3-haiku-20240307-v1:0',
+      s3Bucket: process.env.AWS_S3_BUCKET || 'sahaay-documents',
+      dynamodbTables: {
+        queries: process.env.DYNAMODB_QUERIES_TABLE || 'sahaay-queries',
+        users: process.env.DYNAMODB_USERS_TABLE || 'sahaay-users',
+        schemes: process.env.DYNAMODB_SAVED_SCHEMES_TABLE || 'sahaay-saved-schemes'
+      }
+    }
+  })
+})
+
+// ==================== ERROR HANDLING ====================
+app.use((err, req, res, next) => {
+  console.error('[ERROR] Unhandled error:', err)
+  res.status(500).json({
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? err.message : 'An error occurred'
+  })
+})
+
+// ==================== SERVER STARTUP ====================
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => console.log(`Server listening on ${PORT}`))
+const server = app.listen(PORT, () => {
+  console.log(`
+╔════════════════════════════════════════════════════════╗
+║                SAHAAY AWS SERVER STARTED               ║
+╠════════════════════════════════════════════════════════╣
+║ Server:         http://localhost:${PORT}                   
+║ Environment:    ${process.env.NODE_ENV || 'development'}
+║ AWS Region:     ${process.env.AWS_REGION || 'us-east-1'}
+║ Bedrock Model:  Claude 3 Haiku                        
+║ Database:       DynamoDB (3 tables)                   
+║ Storage:        S3 (${process.env.AWS_S3_BUCKET || 'sahaay-documents'})
+╠════════════════════════════════════════════════════════╣
+║ Available Endpoints:                                   
+║  POST   /api/aws/query            (Query assistant)   
+║  POST   /api/aws/query/multilingual (Multilingual)    
+║  GET    /api/aws/health           (Health check)
+║  GET    /api/aws/info             (Service info)
+║  POST   /api/auth/*               (Authentication)    
+║  POST   /api/translate/translate   (Translation)      
+╚════════════════════════════════════════════════════════╝
+  `)
+})
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('[SERVER] SIGTERM received, gracefully shutting down...')
+  server.close(() => {
+    console.log('[SERVER] Server closed')
+    process.exit(0)
+  })
+})
+
+module.exports = app

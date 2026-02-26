@@ -16,13 +16,20 @@ AI For Bharat is a comprehensive platform that combines:
 ### Frontend
 - **React 18** - UI library
 - **Vite** - Build tool and development server
-- **CSS** - Styling with responsive design
-- **React Context API** - State management and internationalization
+- **HTML5 + CSS3** - Responsive design
+- **React Context API** - State management & i18n (Hindi, Tamil, Telugu, Bengali, English)
 
 ### Backend
-- **Node.js** - Runtime environment
-- **Express.js** - Web framework
-- **Authentication** - User authentication and authorization
+- **Node.js 18+** - Runtime environment
+- **Express.js 4.18** - REST API framework
+- **AWS SDK v3** - Cloud integration
+
+### AI & Cloud Services
+- **Amazon Bedrock** - Claude 3 Haiku for generative AI
+- **Amazon DynamoDB** - NoSQL database for queries & user data
+- **Amazon S3** - Document storage for government schemes
+- **AWS Lambda** - Serverless deployment (optional)
+- **API Gateway** - REST API management
 
 ## Project Structure
 

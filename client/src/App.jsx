@@ -19,7 +19,35 @@ function AppContent(){
 
   useEffect(() => {
     const stored = localStorage.getItem('sahaay_token')
-    if (stored) setUser(JSON.parse(stored))
+    if (stored) {
+      try {
+        const userData = JSON.parse(stored)
+        // Verify token is still valid
+        fetch('/api/auth/verify', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${userData.token}` }
+        })
+          .then(res => res.json())
+          .then(data => {
+            if (data.ok && data.verified) {
+              setUser(userData)
+            } else {
+              // Token invalid or expired
+              localStorage.removeItem('sahaay_token')
+              setUser(null)
+            }
+          })
+          .catch(err => {
+            console.error('Token verification failed:', err)
+            localStorage.removeItem('sahaay_token')
+            setUser(null)
+          })
+      } catch (err) {
+        console.error('Error parsing stored user:', err)
+        localStorage.removeItem('sahaay_token')
+        setUser(null)
+      }
+    }
   }, [])
 
   const logout = () => {
