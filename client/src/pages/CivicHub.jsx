@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
-import useAWSService from '../hooks/useAWSService'
 
-// Mock government schemes database
+// Mock government schemes database with verified apply URLs
 const civicInitiatives = [
   {
     id: 1,
@@ -15,7 +14,8 @@ const civicInitiatives = [
     amount: '₹2000/month',
     description: 'Direct income support to farmer families',
     eligibility: 'Farmers with landholding up to 2 hectares',
-    benefits: 'Quarterly cash transfer of ₹2000'
+    benefits: 'Quarterly cash transfer of ₹2000',
+    applyUrl: 'https://pmkisan.gov.in/'
   },
   {
     id: 2,
@@ -28,7 +28,8 @@ const civicInitiatives = [
     amount: '₹5 Lakhs/year',
     description: 'Health insurance for vulnerable families',
     eligibility: 'Families below certain income threshold',
-    benefits: 'Free hospitalization up to ₹5 lakhs'
+    benefits: 'Free hospitalization up to ₹5 lakhs',
+    applyUrl: 'https://pmjay.gov.in/'
   },
   {
     id: 3,
@@ -41,7 +42,8 @@ const civicInitiatives = [
     amount: 'Free Training',
     description: 'Vocational training and skill development',
     eligibility: 'Youth aged 15-45 years',
-    benefits: 'Free skill training in various trades'
+    benefits: 'Free skill training in various trades',
+    applyUrl: 'https://www.nsdc.org.in/'
   },
   {
     id: 4,
@@ -54,7 +56,8 @@ const civicInitiatives = [
     amount: 'Varies',
     description: 'Sanitation and clean water initiatives',
     eligibility: 'All households and public spaces',
-    benefits: 'Improved sanitation infrastructure'
+    benefits: 'Improved sanitation infrastructure',
+    applyUrl: 'https://swachhbharat.mygov.in/'
   },
   {
     id: 5,
@@ -67,7 +70,8 @@ const civicInitiatives = [
     amount: '₹10k-10Cr',
     description: 'Support for startups and entrepreneurs',
     eligibility: 'Registered Indian startups',
-    benefits: 'Funding, tax benefits, and mentorship'
+    benefits: 'Funding, tax benefits, and mentorship',
+    applyUrl: 'https://www.startupindia.gov.in/'
   },
   {
     id: 6,
@@ -80,20 +84,18 @@ const civicInitiatives = [
     amount: 'Infrastructure',
     description: 'Digital transformation and connectivity',
     eligibility: 'All citizens and businesses',
-    benefits: 'Digital infrastructure and services'
+    benefits: 'Digital infrastructure and services',
+    applyUrl: 'https://www.digitalindia.gov.in/'
   }
 ]
 
 export default function CivicHub({ user }) {
   const { t, language } = useLanguage()
-  const { query, loading, error, lastResponse } = useAWSService(user?.id || 'demo_user')
 
   const [filter, setFilter] = useState('All')
   const [selectedInitiative, setSelectedInitiative] = useState(null)
   const [bookmarked, setBookmarked] = useState({})
   const [searchQuery, setSearchQuery] = useState('')
-  const [aiResponse, setAiResponse] = useState(null)
-  const [showAiSearch, setShowAiSearch] = useState(false)
 
   const categories = ['All', ...new Set(civicInitiatives.map(init => init.category))]
 
@@ -105,16 +107,6 @@ export default function CivicHub({ user }) {
 
   const toggleBookmark = (id) => {
     setBookmarked(b => ({ ...b, [id]: !b[id] }))
-  }
-
-  const handleAIQuery = async (e) => {
-    e.preventDefault()
-    if (!searchQuery.trim()) return
-
-    const result = await query(searchQuery, language)
-    if (result) {
-      setAiResponse(result)
-    }
   }
 
   return (
@@ -145,7 +137,7 @@ export default function CivicHub({ user }) {
           }}>Discover schemes & benefits tailored for you</p>
         </div>
 
-        {/* AI Search Section */}
+        {/* Search Section */}
         <div style={{
           background: 'rgba(255,255,255,0.95)',
           padding: '30px',
@@ -153,73 +145,25 @@ export default function CivicHub({ user }) {
           marginBottom: '40px',
           boxShadow: '0 10px 30px rgba(0,0,0,0.2)'
         }}>
-          <h3 style={{ color: '#667eea', margin: '0 0 20px 0' }}>🤖 AI-Powered Search</h3>
+          <h3 style={{ color: '#667eea', margin: '0 0 20px 0' }}>🔍 Find Schemes</h3>
           <p style={{ color: '#666', marginBottom: '20px' }}>
-            Ask about government schemes in your language. Our AI will find the most relevant schemes for you.
+            Search or browse government schemes that are available for you.
           </p>
 
-          <form onSubmit={handleAIQuery} style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
-            <input
-              type="text"
-              placeholder="Ask about schemes (e.g., 'schemes for farmers', 'health insurance plans')..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              disabled={loading}
-              style={{
-                flex: 1,
-                padding: '12px 15px',
-                border: '2px solid #ddd',
-                borderRadius: '6px',
-                fontSize: '1rem'
-              }}
-            />
-            <button
-              type="submit"
-              disabled={loading || !searchQuery.trim()}
-              style={{
-                padding: '12px 30px',
-                background: '#667eea',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: '600'
-              }}
-            >
-              {loading ? 'Searching...' : 'Search'}
-            </button>
-          </form>
-
-          {error && (
-            <div style={{
-              background: '#f8d7da',
-              color: '#721c24',
+          <input
+            type="text"
+            placeholder="Search for schemes (e.g., 'PM Kisan', 'health insurance')..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              width: '100%',
               padding: '12px 15px',
+              border: '2px solid #ddd',
               borderRadius: '6px',
-              border: '1px solid #f5c6cb'
-            }}>
-              ❌ Error: {error.message}
-            </div>
-          )}
-
-          {aiResponse && (
-            <div style={{
-              background: '#d4edda',
-              color: '#155724',
-              padding: '15px',
-              borderRadius: '6px',
-              border: '1px solid #c3e6cb',
-              marginTop: '15px'
-            }}>
-              <h4 style={{ margin: '0 0 10px 0' }}>AI Response:</h4>
-              <p style={{ margin: 0 }}>{aiResponse.answer || 'Processing your query...'}</p>
-              {aiResponse.sources && (
-                <div style={{ marginTop: '10px', fontSize: '0.9rem', opacity: 0.9 }}>
-                  <strong>Relevant Schemes:</strong> {aiResponse.sources.join(', ')}
-                </div>
-              )}
-            </div>
-          )}
+              fontSize: '1rem',
+              marginBottom: '20px'
+            }}
+          />
         </div>
 
         {/* Category Filters */}
@@ -423,19 +367,23 @@ export default function CivicHub({ user }) {
                 </div>
               </div>
 
-              <button style={{
-                width: '100%',
-                padding: '12px 20px',
-                background: '#667eea',
-                color: 'white',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontWeight: '600',
-                fontSize: '1rem'
-              }}>
-                Apply Now
-              </button>
+              <a href={selectedInitiative.applyUrl} target="_blank" rel="noopener noreferrer" style={{display: 'block', width: '100%', textDecoration: 'none'}}>
+                <button style={{
+                  width: '100%',
+                  padding: '12px 20px',
+                  background: '#667eea',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '1rem',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
+                }} onMouseEnter={(e) => e.target.style.background = '#5568d3'} onMouseLeave={(e) => e.target.style.background = '#667eea'}>
+                  Apply Now 🔗
+                </button>
+              </a>
             </div>
           </div>
         )}

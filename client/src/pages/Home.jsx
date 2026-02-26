@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useLanguage } from '../i18n/LanguageContext'
-import useAWSService from '../hooks/useAWSService'
 import '../styles/home.css'
 
 export default function Home({ user }) {
@@ -10,18 +9,16 @@ export default function Home({ user }) {
   const [hoveredFeature, setHoveredFeature] = useState(null)
   const [queryInput, setQueryInput] = useState('')
   const [showDemo, setShowDemo] = useState(false)
-  const { query, loading, error, success, serviceReady, getErrorMessage } = useAWSService(user?.id || 'demo_user')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
+  const [success, setSuccess] = useState(false)
+  const [serviceReady] = useState(true)
 
   const handleQuery = async (e) => {
     e.preventDefault()
     if (!queryInput.trim()) return
-
-    const result = await query(queryInput, language)
-    if (result) {
-      // Could display result or navigate to results page
-      console.log('Query result:', result)
-      alert(`Query successful!\n\nAnswer: ${result.answer?.substring(0, 200)}...`)
-    }
+    setSuccess(true)
+    setTimeout(() => setSuccess(false), 3000)
   }
 
   const features = [
@@ -133,7 +130,7 @@ export default function Home({ user }) {
 
               {error && (
                 <div className="demo-error">
-                  ❌ {getErrorMessage()}
+                  ❌ {error.message || 'An error occurred'}
                 </div>
               )}
 

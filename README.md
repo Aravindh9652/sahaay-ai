@@ -1,35 +1,45 @@
-# AI For Bharat
+# AI For Bharat - SAHAAY Platform
 
-A full-stack web application designed to provide education, civic engagement, and market opportunities for users in India.
+A comprehensive full-stack web application providing education, civic engagement, resource discovery, and economic opportunities for users across India with multi-language support.
 
 ## Overview
 
-AI For Bharat is a comprehensive platform that combines:
-- **Education**: Digital skills, business courses, career development, and more
-- **Civic Hub**: Community engagement and civic participation
-- **Market**: Marketplace for buying and selling products and services
-- **Dashboard**: User dashboard for tracking progress and activities
-- **Translations**: Multi-language support for accessibility
+AI For Bharat (SAHAAY) is an inclusive digital platform combining:
+- **Civic Hub**: Government schemes, applications, and civic information
+- **Education**: Curated courses with YouTube video integration (8+ courses)
+- **Market Hub**: Job opportunities, internships, grants, and scholarships with career page links
+- **Resource Library**: Location-based discovery of books, libraries, learning centers, and online platforms
+- **User Dashboard**: Progress tracking and personalized recommendations
+- **Multi-Language Support**: English, Hindi, Tamil, Telugu, Bengali
 
-## Tech Stack
+## Current Tech Stack
 
 ### Frontend
-- **React 18** - UI library
-- **Vite** - Build tool and development server
-- **HTML5 + CSS3** - Responsive design
-- **React Context API** - State management & i18n (Hindi, Tamil, Telugu, Bengali, English)
+- **React 18** - Modern UI library with hooks
+- **Vite 5.x/7.x** - Lightning-fast build tool and dev server
+- **React Router v6** - Client-side routing
+- **React Context API** - State management & internationalization (i18n)
+- **CSS3** - Responsive design with animations
+- **Google Maps Embed API** - Location visualization
+- **Web Speech API** - Geolocation for nearby resources
 
 ### Backend
-- **Node.js 18+** - Runtime environment
-- **Express.js 4.18** - REST API framework
-- **AWS SDK v3** - Cloud integration
+- **Node.js 16+** - JavaScript runtime
+- **Express.js 4.x** - RESTful API framework
+- **bcryptjs** - Password hashing (10 salt rounds)
+- **jsonwebtoken (JWT)** - Session management (7-day expiration)
+- **cors** - Cross-origin request handling
 
-### AI & Cloud Services
-- **Amazon Bedrock** - Claude 3 Haiku for generative AI
-- **Amazon DynamoDB** - NoSQL database for queries & user data
-- **Amazon S3** - Document storage for government schemes
-- **AWS Lambda** - Serverless deployment (optional)
-- **API Gateway** - REST API management
+### Data Storage - Dual Mode
+**AWS Option (Production):**
+- **Amazon S3** - User data persistence (JSON files with auto-versioning)
+- **AWS SDK** - Official AWS integration
+- **Environment-based switching** - Automatic S3 fallback
+
+**Non-AWS Option (Development/Offline):**
+- **Local File System** - JSON file storage at `server/data/users.json`
+- **Auto-detection** - Falls back when AWS credentials unavailable
+- **No database required** - Flat-file data persistence
 
 ## Project Structure
 
@@ -59,17 +69,13 @@ Ai_For_Bharat/
 │   ├── vite.config.js               # Vite configuration
 │   └── package.json                 # Dependencies
 │
-├── server/                          # Express backend application
-│   ├── routes/
-│   │   └── auth.js                  # Authentication routes
-│   ├── services/
-│   │   └── aiProvider.js            # AI provider service
-│   ├── index.js                     # Server entry point
-│   └── package.json                 # Dependencies
-│
-└── .kiro/specs/                     # Design & Requirements Documentation
-    ├── design.md                    # UI/UX design specifications
-    └── requirements.md              # Functional & technical requirements
+└── server/                          # Express backend application
+    ├── routes/
+    │   └── auth.js                  # Authentication routes
+    ├── services/
+    │   └── aiProvider.js            # AI provider service
+    ├── index.js                     # Server entry point
+    └── package.json                 # Dependencies
 ```
 
 ## Features
@@ -119,57 +125,149 @@ npm run dev
 ```
 The client will run on `http://localhost:5173` (Vite default)
 
-## Available Pages
+## Available Pages & Features
 
-- **Home** (`/`) - Landing page
-- **Dashboard** (`/dashboard`) - User dashboard
-- **Education** (`/education`) - Learning courses and lessons
-- **Civic Hub** (`/civichub`) - Community engagement
-- **Market** (`/market`) - Marketplace
-- **Profile** (`/profile`) - User profile
-- **Login** (`/login`) - User login
-- **Signup** (`/signup`) - User registration
-- **Translate** (`/translate`) - Translation tools
-- **AI Console** (`/aiconsole`) - AI-powered console
+### Public Routes
+- **Home** (`/`) - Landing page with platform overview
+- **Login** (`/login`) - Email/password authentication
+- **Signup** (`/signup`) - User registration with auto-login
+- **Translate** (`/translate`) - Multi-language translation tool
+
+### Authenticated Routes
+- **Dashboard** (`/dashboard`) - User activity, progress, and recommendations
+- **Civic Hub** (`/civic`) - 6 government schemes with verified URLs:
+  - PM Kisan Samman Nidhi
+  - Ayushman Bharat
+  - Skill India
+  - Swachh Bharat
+  - Startup India
+  - Digital India
+- **Education** (`/education`) - 8 curated courses with YouTube video embeds
+- **Market** (`/market`) - 8 opportunities (jobs, internships, grants, scholarships) with:
+  - Company career page links
+  - Embedded Google Maps location
+  - Salary/prize information
+- **Resources** (`/resources`) - Location-based resource discovery:
+  - 20+ libraries, learning centers, books, online platforms
+  - Geolocation detection
+  - Adjustable search radius (5-200 km)
+  - Embedded Google Maps for each location
+  - Categorized by resource type
+- **Profile** (`/profile`) - User account settings
+
+### Integrated External Services
+- **Google Maps Embed** - Location visualization and navigation
+- **YouTube Embed** - Educational video streaming
+- **LinkedIn Jobs** - Job/internship links
+- **Government Portals** - Official scheme applications
+- **Coursera/Online Platforms** - External course access
 
 ## Configuration
 
-### Environment Variables
-
-Create a `.env` file in the server directory with the following variables:
-```
-PORT=3000
+### Server Environment Variables (`.env`)
+```bash
+# Server
+PORT=5000
 NODE_ENV=development
+
+# JWT
+JWT_SECRET=your-secret-key-here
+JWT_EXPIRY=7d
+
+# AWS (Optional - for S3 storage)
+AWS_REGION=us-east-1
+AWS_ACCESS_KEY_ID=your-access-key
+AWS_SECRET_ACCESS_KEY=your-secret-key
+AWS_S3_BUCKET=your-bucket-name
+
+# Data Storage (auto-detects: use local if AWS creds missing)
+USE_LOCAL_STORE=true  # Set to true to force local storage
 ```
 
-Create a `.env.local` file in the client directory if needed for API endpoints:
+### Client Environment Variables (Optional)
+```bash
+# Vite runs on localhost:5173 by default
+VITE_API_URL=http://localhost:5000
 ```
-VITE_API_URL=http://localhost:3000
+
+### Running with AWS vs Non-AWS
+**With AWS S3:**
+- Set all AWS_* variables in `.env`
+- User data persists to S3  
+- Auto-versioning enabled
+
+**Without AWS (Development):**
+- Leave AWS credentials empty
+- System auto-falls back to `server/data/users.json`
+- Perfect for local development
+
+## Scripts & Startup
+
+### Client Scripts
+```bash
+cd client
+npm install
+npm run dev          # Start Vite dev server (http://localhost:5173)
+npm run build        # Production build
+npm run preview      # Preview production bundle
 ```
 
-## Scripts
+### Server Scripts
+```bash
+cd server
+npm install
+node index.js        # Start Express server (http://localhost:5000)
+```
 
-### Client
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
+### Full Stack Startup (Recommended)
+```bash
+# Terminal 1 - Backend
+cd server
+node index.js
 
-### Server
-- `npm start` - Start the server
-- `npm run dev` - Start with nodemon (if configured)
+# Terminal 2 - Frontend (in new terminal)
+cd client
+npm run dev -- --host
+```
 
-## Hackathon Submission
+### Demo Credentials
+```
+Email: demo@sahaay.com
+Password: demo123
+```
+(Auto-created on startup with bcrypt-hashed password)
 
-This project is submitted for hackathon evaluation. Design and technical specification documents are available in the `.kiro/specs` directory:
+## Key Implementation Details
 
-- **Design Specifications** - UI/UX design and component specifications
-- **Requirements Documentation** - Functional and technical requirements
+### Authentication Flow
+1. User signs up → password hashed with bcrypt → user created in S3/local storage
+2. User logs in → credentials verified → JWT token generated → stored in localStorage
+3. Protected routes → JWT verified via `/api/auth/verify` endpoint
+4. Token expiry → automatic logout after 7 days
 
-These files contain detailed information about the project's architecture, design decisions, and implementation requirements.
+### Multi-Language Support
+- 5 languages: English, Hindi, Tamil, Telugu, Bengali
+- Context API for i18n state management
+- Dynamic document language (`lang` attribute) and direction (LTR/RTL)
+- All UI text translated through `t()` hook
+
+### External Integrations
+- **Google Maps**: Embedded for resource locations and job locations
+- **YouTube**: Embedded course videos with autoplay
+- **Government URLs**: Direct links to official scheme applications
+- **LinkedIn Jobs**: Search-based job/internship feeds
+- **Coursera/Khan Academy**: Links to external learning platforms
+
+### Data Persistence
+- **User Data**: S3 (with local fallback) as JSON documents
+- **Nested User Structure**: Profile, progress, bookmarks, activity
+- **No migrations needed**: Flat-file JSON schema
+- **S3 Versioning**: Enabled for data recovery
 
 ## Contributing
 
 1. Create a feature branch
-2. Make your changes
-3. Test thoroughly
-4. Submit a pull request
+2. Test both AWS and non-AWS configurations
+3. Ensure translations are added for all 5 languages
+4. Verify responsive design on mobile
+5. Submit pull request with test evidence

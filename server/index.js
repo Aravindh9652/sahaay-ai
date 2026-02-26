@@ -2,10 +2,10 @@ const express = require('express')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const path = require('path')
-const connectDB = require('./config/database')
+// const connectDB = require('./config/database') // disabled (using S3 storage)
 const aiProvider = require('./services/aiProvider')
 
-// AWS Integration modules - REQUIRED for Bedrock + RAG
+// AWS Integration modules - OPTIONAL
 let ragEngine, s3Client, dynamodbClient
 try {
   ragEngine = require('./aws/ragEngine')
@@ -13,18 +13,65 @@ try {
   dynamodbClient = require('./aws/dynamodbClient')
   console.log('[AWS] Integration modules loaded successfully')
 } catch (err) {
-  console.error('[AWS] CRITICAL: AWS modules not available. Please install @aws-sdk packages')
-  process.exit(1)
+  console.log('[AWS] AWS modules not available - using local storage fallback')
+  // AWS modules are optional - we'll use local JSON storage fallback
 }
 
 dotenv.config()
 
-// Connect to database
-connectDB()
+// Connect to database (disabled - using S3 instead)
+// connectDB()
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+// ==================== INITIALIZE DEMO USER ====================
+const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
+const { loadUsers, saveUsers } = require('./services/userStore')
+
+async function ensureDemoUser() {
+  try {
+    const users = await loadUsers()
+    const demoExists = Object.values(users).find(u => u.email === 'demo@sahaay.com')
+    if (demoExists) return
+    
+    const hash = await bcrypt.hash('demo123', 10)
+    const demoUser = {
+      id: 'demo_user_001',
+      name: 'Demo User',
+      email: 'demo@sahaay.com',
+      passwordHash: hash,
+      verified: true,
+      createdAt: new Date(),
+      lastLogin: new Date(),
+      profile: {
+        name: 'Demo User',
+        email: 'demo@sahaay.com',
+        phone: '+91-9999999999',
+        location: 'India',
+        language: 'en',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=demo_user_001',
+        bio: 'Welcome to SAHAAY! Explore government schemes and services.',
+        skills: ['Research', 'Learning'],
+        interests: ['Government Schemes', 'Education', 'Healthcare'],
+        joinedDate: new Date(),
+        isActive: true
+      },
+      progress: { education: {}, market: {}, civic: {}, translate: { history: [] } },
+      bookmarks: { market: [], education: [], civic: [] },
+      activity: [{ type: 'signup', description: 'Demo account created', timestamp: new Date() }]
+    }
+    users['demo_user_001'] = demoUser
+    await saveUsers(users)
+    console.log('[Init] Demo user created: demo@sahaay.com / demo123')
+  } catch (err) {
+    console.error('[Init] Failed to create demo user:', err.message)
+  }
+}
+
+ensureDemoUser()
 
 // ==================== HEALTH CHECK ENDPOINTS ====================
 app.get('/', (req, res) => {

@@ -238,8 +238,6 @@ class AWSServiceClient {
 }
 
 // Export singleton for use throughout the app
-const awsServiceClient = new AWSServiceClient(
-  process.env.REACT_APP_API_URL || 'http://localhost:5000'
-)
+const awsServiceClient = new AWSServiceClient('http://localhost:5000')
 
 export default awsServiceClient

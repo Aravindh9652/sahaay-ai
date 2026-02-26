@@ -2,81 +2,91 @@
 
 ## 1. Overview
 
-SAHAAY is an AI-powered comprehensive platform designed to provide unified access to civic help, educational opportunities, and market resources for rural and urban users across India, with a strong focus on accessibility through multilingual support and voice-based interactions.
+SAHAAY is a comprehensive digital platform providing unified access to civic information, education, economic opportunities, and resource discovery for users across India with multi-language support and location-based services.
 
 ### 1.1 Vision
-Bridge India's digital divide by providing accessible, multilingual, voice-first access to government services, education, and economic opportunities.
+Empower Indian citizens with accessible, multilingual access to government services, quality education, economic opportunities, and local resources - whether with or without cloud infrastructure.
 
 ### 1.2 Target Users
-- Rural citizens with limited digital literacy
 - Farmers seeking government schemes and market access
 - Job seekers requiring skill development
-- Small business owners and artisans
-- Students and lifelong learners
-- First-time internet users
+- Students and lifelong learners  
+- Small business owners and entrepreneurs
+- Rural and urban citizens seeking resources
+- Government scheme applicants
+- Educational institutions and organizations
+
+### 1.3 Deployment Options
+- **Cloud-Native**: AWS S3 for user data (production recommended)
+- **Self-Hosted**: Local file storage with Node.js (development & offline)
+- **Hybrid**: Auto-switching between S3 and local based on credentials
 
 ## 2. Functional Requirements
 
 ### 2.1 Authentication System
 
-**REQ-AUTH-001: User Registration**
-- System shall allow users to create accounts with email and password
-- System shall hash passwords using bcrypt with 10 salt rounds
-- System shall validate email format and password strength
-- System shall store user data securely
+**REQ-AUTH-001: User Registration** ✓ IMPLEMENTED
+- System allows users to create accounts with email and password
+- Passwords hashed using bcrypt with 10 salt rounds
+- Email format validation (RFC-compliant)
+- User data stored securely in S3 or local JSON
+- Duplicate email prevention
 
-**REQ-AUTH-002: User Login**
-- System shall authenticate users with email/password
-- System shall generate JWT tokens with 7-day validity
-- System shall maintain user sessions via localStorage
-- System shall provide logout functionality
+**REQ-AUTH-002: User Login** ✓ IMPLEMENTED
+- Email/password authentication with bcrypt verification
+- JWT tokens generated with 7-day expiration
+- Token stored in localStorage with user metadata
+- Demo account auto-created: demo@sahaay.com / demo123
 
-**REQ-AUTH-003: Session Management**
-- System shall validate JWT tokens on protected routes
-- System shall automatically logout users after token expiration
-- System shall persist user preferences across sessions
+**REQ-AUTH-003: Session Management** ✓ IMPLEMENTED
+- JWT verification on all protected routes
+- Token validation endpoint: `/api/auth/verify`
+- Automatic logout on token expiration
+- Activity tracking (lastLogin timestamp)
 
 ### 2.2 Civic Hub Module
 
-**REQ-CIVIC-001: Government Schemes Access**
-- System shall provide information on 500+ government schemes
-- System shall categorize schemes by type (agriculture, education, healthcare, employment, housing, social welfare)
-- System shall display scheme details including benefits, eligibility, and application process
-- System shall support scheme search by name or category
+**REQ-CIVIC-001: Government Schemes Access** ✓ IMPLEMENTED
+- System provides 6 curated government schemes
+- Schemes categorized: Agriculture, Healthcare, Education, Infrastructure, Business, Technology
+- Details include: benefits, eligibility, amount, status
+- Search by name or category filtering
+- Direct links to official government portals for application
+- Responsive scheme detail modal with full information
 
-**REQ-CIVIC-002: Health Services**
-- System shall provide hospital and clinic locator functionality
-- System shall display health program information
-- System shall provide emergency contact numbers
-- System shall support location-based health service search
+**REQ-CIVIC-002: External Portal Integration** ✓ IMPLEMENTED
+Direct links to verified URLs:
+- PM Kisan: https://pmkisan.gov.in/
+- Ayushman Bharat: https://pmjay.gov.in/
+- Skill India: https://www.nsdc.org.in/
+- Swachh Bharat: https://swachhbharat.mygov.in/
+- Startup India: https://www.startupindia.gov.in/
+- Digital India: https://www.digitalindia.gov.in/
 
-**REQ-CIVIC-003: Legal Resources**
-- System shall provide information on legal rights
-- System shall offer guidance on legal procedures
-- System shall provide step-by-step legal process explanations
-- System shall support FAQ-based legal queries
-
-**REQ-CIVIC-004: Emergency Services**
-- System shall provide quick access to emergency contact numbers
-- System shall support location-based emergency service information
-- System shall display emergency procedures and guidelines
+**REQ-CIVIC-003: Civic Information** ✓ PARTIALLY IMPLEMENTED
+- Scheme details and application guidance
+- Eligibility criteria clearly displayed
+- Benefits and beneficiary information
+- Future: Emergency services and legal resources
 
 ### 2.3 Education Module
 
-**REQ-EDU-001: Course Catalog**
-- System shall provide at least 6 curated courses across multiple categories
-- System shall categorize courses by: Tech, Business, Career
-- System shall display course difficulty levels (Beginner, Intermediate, Advanced)
-- System shall show estimated learning time for each course
+**REQ-EDU-001: Course Catalog** ✓ IMPLEMENTED
+- System provides 8 curated courses across Tech, Business, Career
+- Courses categorized by difficulty: Beginner, Intermediate, Advanced
+- Each course shows estimated duration and enrollment count
+- YouTube video integration for each course
 
-**REQ-EDU-002: Course Content**
-- System shall provide the following courses:
-  - Digital Skills 101 (Beginner, 2 hours)
-  - Online Safety & Privacy (Beginner, 1.5 hours)
-  - Accounting for Farmers (Intermediate, 3 hours)
-  - Market Trends Analysis (Advanced, 4 hours)
-  - Resume Writing (Beginner, 2 hours)
-  - Interview Preparation (Intermediate, 2.5 hours)
+**REQ-EDU-002: Course Content** ✓ IMPLEMENTED
+Available courses with real YouTube video IDs:
+1. Digital Skills 101 (Tech, Beginner, 2h) - Video: w67LX0akI3c
+2. Basic Accounting for Farmers (Business, Intermediate, 3h) - Video: V_qf1d5HUk4
+3. Online Safety & Privacy (Tech, Beginner, 1.5h) - Video: HaXuMVjbOeo  
+4. Market Trends Analysis (Business, Advanced, 4h) - Video: KRLzzRnkI5w
+5. Resume Writing (Career, Beginner, 2h) - Video: y8OnoxKU✔U
+6. Interview Preparation (Career, Intermediate, 3h) - Video: X9XwYPaB_F4
+7. E-commerce Basics (Business, Beginner, 2.5h) - Video: 4DKTJj9CPHE
+8. Content Creation Masterclass (Tech, Intermediate, 3.5h) - Video: LWOdkI45cyc
 
 **REQ-EDU-003: Progress Tracking**
 - System shall track user progress for each course
@@ -91,37 +101,75 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 
 ### 2.4 Market & Economic Hub
 
-**REQ-MARKET-001: Farmer Direct Market**
-- System shall allow farmers to list agricultural products
-- System shall connect farmers directly with buyers
-- System shall display product listings with prices
-- System shall support product search and filtering
+**REQ-MARKET-001: Opportunity Listings** ✓ IMPLEMENTED
+- System displays 8 opportunities (jobs, internships, grants, scholarships)
+- Shows salary/prize, deadline, and views count
+- Includes company career page links
+- Location information with embedded Google Maps
+- Categories: Jobs, Internships, Grants, Scholarships
 
-**REQ-MARKET-002: Artisan Marketplace**
+**REQ-MARKET-002: External Links Integration** ✓ IMPLEMENTED
+Opportunities linked to real external resources:
+- Jobs: LinkedIn job search by location and role
+- Internships: LinkedIn internship opportunities
+- Grants: Government startup grants portal
+- Scholarships: Online course platforms (Coursera)
 - System shall allow artisans to list handicrafts and local products
-- System shall provide product showcase functionality
-- System shall support image uploads for products
-- System shall enable buyer-seller communication
+**REQ-MARKET-003: Google Maps Location Display** ✓ IMPLEMENTED
+- Embedded Google Maps for each opportunity's location
+- Shows job location coordinates
+- Direct "View on Google Maps" button
+- Location-based opportunity filtering
+- Distance visualization on map
 
-**REQ-MARKET-003: Micro-Finance Programs**
-- System shall provide information on low-interest loan programs
-- System shall display eligibility criteria for microfinance
-- System shall guide users through application process
-- System shall connect users with financial institutions
+### 2.5 Resource Library (New Feature) ✓ IMPLEMENTED
 
-**REQ-MARKET-004: Job Board**
-- System shall display local employment opportunities
-- System shall allow job search by location and category
-- System shall provide job application guidance
-- System shall track application status
+**REQ-RES-001: Location-Based Resource Discovery** ✓ IMPLEMENTED
+- Users enable browser geolocation (optional)
+- System calculates distances to 20+ multi-type resources
+- Search radius adjustable from 5-200 km via slider
+- Quick access buttons: 25km, 50km, 100km, 150km
+- Resources auto-sorted by proximity distance
+- Distance displayed in kilometers with location badge
 
-**REQ-MARKET-005: Analytics Dashboard**
-- System shall display monthly earnings statistics
-- System shall show transaction success rate
-- System shall display user ratings
-- System shall provide performance metrics
+**REQ-RES-002: Multi-Type Resources** ✓ IMPLEMENTED
+20 resources spanning 6 categories:
+- **Books** (3): Indian literature, STEM textbooks, competitive exam guides
+- **Libraries** (4): National Central Library Delhi, Anna Centenary Chennai, etc.
+- **Learning Centers** (4): IIT Delhi, NIT Bangalore, BITS Pilani, etc.
+- **Online Platforms** (5): NPTEL, Khan Academy, Coursera, edX, Udacity
+- **Government Schemes** (2): Skill India, Digital India programs
+- **Study Groups** (2): Community learning centers in metro cities
 
-### 2.5 Translation & Voice Service
+**REQ-RES-003: Geolocation Integration** ✓ IMPLEMENTED
+- Browser geolocation request with user permission
+- Fallback message if geolocation denied
+- Manual location entry as future option
+- Latitude/longitude coordinates for all resources
+- Real resource locations across 8 Indian cities
+
+**REQ-RES-004: Google Maps Integration** ✓ IMPLEMENTED
+- Google Maps Embed iframe for each resource location
+- Map view showing user location + all nearby resources
+- "View on Google Maps" button for navigation
+- Distance calculation using Haversine formula (lat/lng → km)
+- Zoom capabilities and interactive map controls
+
+**REQ-RES-005: Resource Detail View** ✓ IMPLEMENTED
+- Modal display with resource name, type, location
+- Operating hours and contact information
+- Number of available courses/books
+- Embedded Google Maps location display
+- Bookmark/save functionality
+- "Learn More" external links
+
+**REQ-RES-006: View Modes** ✓ IMPLEMENTED
+- **List View**: Cards sorted by distance, shows distance badge
+- **Map View**: Interactive Google Maps with user location center
+- Toggle between views via button
+- Default to list after location detection
+
+### 2.6 Translation & Voice Service
 
 **REQ-LANG-001: Multilingual Support**
 - System shall support 5 Indian languages:
@@ -149,12 +197,14 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall maintain translation accuracy above 90%
 - System shall support offline translation for common phrases
 
-**REQ-LANG-005: Language Persistence**
-- System shall save user language preference to localStorage
-- System shall apply language preference across all modules
-- System shall allow language switching at any time
+**REQ-LANG-005: Language Persistence** ✓ IMPLEMENTED
+- System saves user language preference to localStorage
+- Language preference applies across all pages/modules
+- Language switching works at any time
+- RTL support for right-to-left languages (Hindi, Tamil, Telugu, Bengali)
+- HTML document language attribute updates dynamically
 
-### 2.6 User Dashboard
+### 2.7 User Dashboard
 
 **REQ-DASH-001: Personalized Welcome**
 - System shall display personalized greeting with user name
@@ -185,7 +235,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall provide single-page summary format
 - System shall support offline access to handbook
 
-### 2.7 User Profile Management
+### 2.8 User Profile Management
 
 **REQ-PROFILE-001: Profile Editing**
 - System shall allow users to edit personal information
@@ -202,9 +252,56 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall allow email update with verification
 - System shall support account deletion
 
-## 3. Non-Functional Requirements
+## 4. Data Storage Specifications
 
-### 3.1 Performance
+### 4.1 AWS S3 Configuration (Production)
+**Storage Format:**
+- Bucket: JSON document containing all users
+- File: `users.json` in S3 bucket root
+- Versioning: Enabled for recovery
+- Format: UTF-8 JSON
+
+**User Data Structure:**
+```javascript
+{
+  id: "UUID-crypto",
+  email: "user@example.com",
+  passwordHash: "bcrypt-hash",
+  name: "User Name",
+  phone: "+91-XXXXX-XXXXX",
+  createdAt: "2024-02-26T10:30:00Z",
+  lastLogin: "2024-02-26T15:45:00Z",
+  profile: { /* user profile data */ },
+  progress: { /* course progress */ },
+  bookmarks: { /* saved resources */ },
+  activity: { /* user activity log */ }
+}
+```
+
+**Required AWS Permissions:**
+- `s3:GetObject` - Read users.json
+- `s3:PutObject` - Write/update users.json
+- `s3:ListBucket` - List objects
+
+### 4.2 Non-AWS Configuration (Development)
+**Storage Location:** `server/data/users.json`
+**Format:** Local JSON file (auto-created if missing)
+**No credentials required** - Perfect for:
+- Local development
+- Offline testing
+- CI/CD pipelines without AWS
+- Demo environments
+
+**Auto-Detection Logic:**
+```javascript
+if (!AWS_ACCESS_KEY_ID || !AWS_SECRET_ACCESS_KEY) {
+  USE_LOCAL_STORAGE = true;  // Fallback to local JSON
+}
+```
+
+## 5. Non-Functional Requirements
+
+### 5.1 Performance
 
 **REQ-PERF-001: Response Time**
 - System shall load pages within 3 seconds on 3G networks
@@ -216,7 +313,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall handle 100,000 daily active users
 - System shall scale horizontally for increased load
 
-### 3.2 Accessibility
+### 5.2 Accessibility
 
 **REQ-ACCESS-001: Voice-First Design**
 - System shall provide complete functionality via voice commands
@@ -240,7 +337,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall cache essential data for offline access
 - System shall sync data when connection is restored
 
-### 3.3 Security
+### 5.3 Security
 
 **REQ-SEC-001: Authentication Security**
 - System shall use JWT tokens for authentication
@@ -260,7 +357,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall allow users to delete their data
 - System shall anonymize analytics data
 
-### 3.4 Usability
+### 5.4 Usability
 
 **REQ-USE-001: User Interface**
 - System shall provide clean, simple UI design
@@ -280,7 +377,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall confirm successful operations
 - System shall guide users through multi-step processes
 
-### 3.5 Compatibility
+### 5.5 Compatibility
 
 **REQ-COMPAT-001: Browser Support**
 - System shall work on Chrome 90+
@@ -294,7 +391,7 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall work on desktop browsers
 - System shall work on tablets
 
-### 3.6 Reliability
+### 5.6 Reliability
 
 **REQ-REL-001: Availability**
 - System shall maintain 99.5% uptime
@@ -306,52 +403,73 @@ Bridge India's digital divide by providing accessible, multilingual, voice-first
 - System shall prevent data corruption
 - System shall maintain data consistency
 
-## 4. Integration Requirements
+## 6. Integration Requirements
 
-### 4.1 AI Integration
+### 6.1 External Service Integrations
 
-**REQ-INT-001: OpenAI API**
-- System shall integrate with OpenAI API for intelligent responses
-- System shall provide fallback stub responses when API unavailable
-- System shall handle API rate limits gracefully
-- System shall support extensible AI provider architecture
+**REQ-INT-001: YouTube Video Integration** ✓ IMPLEMENTED
+- Educational videos embedded via YouTube Embed API
+- Video IDs stored in course metadata
+- Autoplay enabled for seamless learning
+- Responsive 16:9 aspect ratio
+- Full course details displayed alongside player
 
-### 4.2 External Services
+**REQ-INT-002: Google Maps Integration** ✓ IMPLEMENTED
+- Location visualization for resources and opportunities
+- Interactive map with user location + nearby resources
+- Responsive embedding with zoom controls
+- "View on Maps" direct navigation links
+- Distance calculation using Haversine formula
 
-**REQ-INT-002: Government Data Sources**
-- System shall integrate with government scheme databases
-- System shall update scheme information regularly
-- System shall validate data accuracy
+**REQ-INT-003: Government Service Links** ✓ IMPLEMENTED
+- Direct links to 6 verified government schemes
+- PM Kisan (pmkisan.gov.in)
+- Ayushman Bharat (pmjay.gov.in)
+- Skill India (nsdc.org.in)
+- Swachh Bharat (swachhbharat.mygov.in)
+- Startup India (startupindia.gov.in)
+- Digital India (digitalindia.gov.in)
+- External links open in new tabs for seamless browsing
 
-## 5. Constraints
+### 6.2 LinkedIn & Career Integration
 
-### 5.1 Technical Constraints
+**REQ-INT-004: Job & Internship Linking** ✓ IMPLEMENTED
+- Dynamic LinkedIn search links based on location/role
+- Internship opportunity feeds
+- Career page links from company websites
+- Scholarship integration with Coursera, Udacity
+
+### 6.3 Future Integration Services
+
+## 7. Constraints
+
+### 7.1 Technical Constraints
 - Must use React 18.2 for frontend
 - Must use Express.js for backend
 - Must support Web Speech API for voice features
 - Must work on low-bandwidth networks (2G/3G)
 
-### 5.2 Business Constraints
+### 7.2 Business Constraints
 - Must be free for basic features
 - Must support premium tier for advanced features
 - Must comply with Indian data protection laws
 - Must be scalable to 1 million users
 
-### 5.3 User Constraints
+### 7.3 User Constraints
 - Must work for users with no prior digital experience
 - Must work in areas with poor internet connectivity
 - Must support users with basic smartphones
 - Must be accessible to users with disabilities
 
-## 6. Success Criteria
+## 8. Success Criteria
 
-### 6.1 User Adoption
+### 8.1 User Adoption
 - 10,000+ registered users in first 3 months
 - 60% monthly active user rate
 - 4.5+ star average rating
 - 70% user retention after 30 days
 
-### 6.2 Engagement Metrics
+### 8.2 Engagement Metrics
 - Average session duration: 5+ minutes
 - 3+ modules used per user
 - 50% of users complete at least one course

@@ -205,7 +205,6 @@ export default function Login({ setUser }){
                 display: 'block',
                 marginBottom: '10px',
                 fontWeight: '700',
-                color: '#1a1a2e',
                 fontSize: '14px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.5px',
@@ -220,8 +219,18 @@ export default function Login({ setUser }){
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                onFocus={() => setFocusedField('email')}
-                onBlur={() => setFocusedField(null)}
+                onFocus={e => {
+                  setFocusedField('email');
+                  e.target.style.borderColor = '#667eea';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.15)';
+                  e.target.style.background = 'linear-gradient(135deg, #ffffff, rgba(248, 249, 250, 0.5))';
+                }}
+                onBlur={e => {
+                  setFocusedField(null);
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.boxShadow = 'none';
+                  e.target.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                }}
                 style={{
                   width: '100%',
                   padding: '14px 16px',
@@ -233,16 +242,6 @@ export default function Login({ setUser }){
                   background: 'linear-gradient(135deg, #ffffff, #f8f9fa)',
                   fontWeight: '500',
                   boxSizing: 'border-box'
-                }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#667eea'
-                  e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.15)'
-                  e.target.style.background = 'linear-gradient(135deg, #ffffff, rgba(248, 249, 250, 0.5))'
-                }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.boxShadow = 'none'
-                  e.target.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)'
                 }}
               />
             </div>
@@ -268,8 +267,18 @@ export default function Login({ setUser }){
                   onChange={e => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  onFocus={() => setFocusedField('password')}
-                  onBlur={() => setFocusedField(null)}
+                  onFocus={e => {
+                    setFocusedField('password');
+                    e.target.style.borderColor = '#667eea';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.15)';
+                    e.target.style.background = 'linear-gradient(135deg, #ffffff, rgba(248, 249, 250, 0.5))';
+                  }}
+                  onBlur={e => {
+                    setFocusedField(null);
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.boxShadow = 'none';
+                    e.target.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+                  }}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
@@ -282,16 +291,6 @@ export default function Login({ setUser }){
                     background: 'linear-gradient(135deg, #ffffff, #f8f9fa)',
                     fontWeight: '500',
                     boxSizing: 'border-box'
-                  }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#667eea'
-                    e.target.style.boxShadow = '0 0 0 4px rgba(102, 126, 234, 0.15)'
-                    e.target.style.background = 'linear-gradient(135deg, #ffffff, rgba(248, 249, 250, 0.5))'
-                  }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e5e7eb'
-                    e.target.style.boxShadow = 'none'
-                    e.target.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)'
                   }}
                 />
                 <button

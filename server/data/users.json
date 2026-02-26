@@ -1,0 +1,180 @@
+{
+  "demo_user_001": {
+    "id": "demo_user_001",
+    "name": "Demo User",
+    "email": "demo@sahaay.com",
+    "passwordHash": "$2a$10$ihEe9Anw8mkVJLx5AlDgvO2zWuxHmmnbLIMS5w02CB2fuTHoG1nme",
+    "verified": true,
+    "createdAt": "2026-02-26T15:03:35.359Z",
+    "lastLogin": "2026-02-26T16:25:45.230Z",
+    "profile": {
+      "name": "Demo User",
+      "email": "demo@sahaay.com",
+      "phone": "+91-9999999999",
+      "location": "India",
+      "language": "en",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=demo_user_001",
+      "bio": "Welcome to SAHAAY! Explore government schemes and services.",
+      "skills": [
+        "Research",
+        "Learning"
+      ],
+      "interests": [
+        "Government Schemes",
+        "Education",
+        "Healthcare"
+      ],
+      "joinedDate": "2026-02-26T15:03:35.359Z",
+      "isActive": true
+    },
+    "progress": {
+      "education": {},
+      "market": {},
+      "civic": {},
+      "translate": {
+        "history": []
+      }
+    },
+    "bookmarks": {
+      "market": [],
+      "education": [],
+      "civic": []
+    },
+    "activity": [
+      {
+        "type": "signup",
+        "description": "Demo account created",
+        "timestamp": "2026-02-26T15:03:35.359Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T15:04:02.779Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T15:07:33.234Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:15:56.904Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:17:55.184Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:22:10.446Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:22:29.038Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:25:15.342Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T16:25:45.230Z"
+      }
+    ]
+  },
+  "d5f21a142a00342d": {
+    "id": "d5f21a142a00342d",
+    "name": "Arav",
+    "email": "arav@gmail.com",
+    "passwordHash": "$2a$10$2wHD.gSioWE3edvSoy28DOclyGD0aOS9LEuUv51c1eydug9L6BmhO",
+    "verified": false,
+    "createdAt": "2026-02-26T15:12:22.747Z",
+    "lastLogin": "2026-02-26T15:12:36.116Z",
+    "profile": {
+      "name": "Arav",
+      "email": "arav@gmail.com",
+      "phone": "1234567890",
+      "location": "Vijayawada",
+      "language": "en",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=d5f21a142a00342d",
+      "bio": "",
+      "skills": [],
+      "interests": [],
+      "joinedDate": "2026-02-26T15:12:22.747Z",
+      "isActive": true
+    },
+    "progress": {
+      "education": {},
+      "market": {},
+      "civic": {},
+      "translate": {
+        "history": []
+      }
+    },
+    "bookmarks": {
+      "market": [],
+      "education": [],
+      "civic": []
+    },
+    "activity": [
+      {
+        "type": "signup",
+        "description": "Account created successfully",
+        "timestamp": "2026-02-26T15:12:22.747Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-26T15:12:36.116Z"
+      }
+    ]
+  },
+  "02783a858c2b35a1": {
+    "id": "02783a858c2b35a1",
+    "name": "Test User",
+    "email": "testuser@example.com",
+    "passwordHash": "$2a$10$sYBDf4WKD0VKX6Po7aDoO.GvQDhyCNkvQXHLYdA/o4Kgb0v9WuY0y",
+    "verified": false,
+    "createdAt": "2026-02-26T16:23:23.131Z",
+    "lastLogin": "2026-02-26T16:23:23.131Z",
+    "profile": {
+      "name": "Test User",
+      "email": "testuser@example.com",
+      "phone": "",
+      "location": "",
+      "language": "en",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=02783a858c2b35a1",
+      "bio": "",
+      "skills": [],
+      "interests": [],
+      "joinedDate": "2026-02-26T16:23:23.131Z",
+      "isActive": true
+    },
+    "progress": {
+      "education": {},
+      "market": {},
+      "civic": {},
+      "translate": {
+        "history": []
+      }
+    },
+    "bookmarks": {
+      "market": [],
+      "education": [],
+      "civic": []
+    },
+    "activity": [
+      {
+        "type": "signup",
+        "description": "Account created successfully",
+        "timestamp": "2026-02-26T16:23:23.131Z"
+      }
+    ]
+  }
+}

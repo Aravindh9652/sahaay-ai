@@ -109,7 +109,7 @@ export default function Signup({ setUser }){
         })
       })
       const data = await res.json()
-
+      
       if (data.ok) {
         const user = {
           id: data.user.id,
@@ -122,14 +122,13 @@ export default function Signup({ setUser }){
         setUser(user)
         navigate('/dashboard')
       } else if (data.userExists) {
-        setError(t('alreadyExists'))
-        setTimeout(() => {
-          navigate('/login', { state: { email } })
-        }, 2000)
+        setError('Email already registered. Please login instead.')
+        setTimeout(() => navigate('/login', { state: { email } }), 2000)
       } else {
-        setError(data.error || 'Signup failed. Please try again.')
+        setError(data.error || t('signupError'))
       }
     } catch (err) {
+      console.error('Signup error:', err)
       setError('Network error. Please check your connection and try again.')
     } finally {
       setLoading(false)
@@ -172,8 +171,7 @@ export default function Signup({ setUser }){
           height: '400px',
           background: 'radial-gradient(circle, rgba(255,255,255,0.15), transparent)',
           borderRadius: '50%',
-          animation: 'float 8s ease-in-out infinite reverse',
-          pointerEvents: 'none'
+          animation: 'float 8s ease-in-out infinite reverse'
         }}></div>
 
         <div className="signup-container" style={{
@@ -279,8 +277,6 @@ export default function Signup({ setUser }){
                   onChange={e => setName(e.target.value)}
                   placeholder="Your full name"
                   required
-                  onFocus={() => setFocusedField('name')}
-                  onBlur={() => setFocusedField(null)}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
@@ -293,13 +289,15 @@ export default function Signup({ setUser }){
                     fontWeight: '500',
                     boxSizing: 'border-box'
                   }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#f093fb'
-                    e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                  onFocus={e => {
+                    setFocusedField('name');
+                    e.target.style.borderColor = '#f093fb';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                   }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e5e7eb'
-                    e.target.style.boxShadow = 'none'
+                  onBlur={e => {
+                    setFocusedField(null);
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
               </div>
@@ -322,8 +320,6 @@ export default function Signup({ setUser }){
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
                   placeholder="+91 9876543210"
-                  onFocus={() => setFocusedField('phone')}
-                  onBlur={() => setFocusedField(null)}
                   style={{
                     width: '100%',
                     padding: '14px 16px',
@@ -336,13 +332,15 @@ export default function Signup({ setUser }){
                     fontWeight: '500',
                     boxSizing: 'border-box'
                   }}
-                  onFocus={(e) => {
-                    e.target.style.borderColor = '#f093fb'
-                    e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                  onFocus={e => {
+                    setFocusedField('phone');
+                    e.target.style.borderColor = '#f093fb';
+                    e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                   }}
-                  onBlur={(e) => {
-                    e.target.style.borderColor = '#e5e7eb'
-                    e.target.style.boxShadow = 'none'
+                  onBlur={e => {
+                    setFocusedField(null);
+                    e.target.style.borderColor = '#e5e7eb';
+                    e.target.style.boxShadow = 'none';
                   }}
                 />
               </div>
@@ -368,8 +366,6 @@ export default function Signup({ setUser }){
                 onChange={e => setEmail(e.target.value)}
                 placeholder="you@example.com"
                 required
-                onFocus={() => setFocusedField('email')}
-                onBlur={() => setFocusedField(null)}
                 style={{
                   width: '100%',
                   padding: '14px 16px',
@@ -382,13 +378,15 @@ export default function Signup({ setUser }){
                   fontWeight: '500',
                   boxSizing: 'border-box'
                 }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#f093fb'
-                  e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                onFocus={e => {
+                  setFocusedField('email');
+                  e.target.style.borderColor = '#f093fb';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                 }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.boxShadow = 'none'
+                onBlur={e => {
+                  setFocusedField(null);
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -412,8 +410,6 @@ export default function Signup({ setUser }){
                 value={locationField}
                 onChange={e => setLocationField(e.target.value)}
                 placeholder="City, State"
-                onFocus={() => setFocusedField('location')}
-                onBlur={() => setFocusedField(null)}
                 style={{
                   width: '100%',
                   padding: '14px 16px',
@@ -426,13 +422,15 @@ export default function Signup({ setUser }){
                   fontWeight: '500',
                   boxSizing: 'border-box'
                 }}
-                onFocus={(e) => {
-                  e.target.style.borderColor = '#f093fb'
-                  e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                onFocus={e => {
+                  setFocusedField('location');
+                  e.target.style.borderColor = '#f093fb';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                 }}
-                onBlur={(e) => {
-                  e.target.style.borderColor = '#e5e7eb'
-                  e.target.style.boxShadow = 'none'
+                onBlur={e => {
+                  setFocusedField(null);
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -459,8 +457,6 @@ export default function Signup({ setUser }){
                     onChange={e => setPassword(e.target.value)}
                     placeholder="Min 6 characters"
                     required
-                    onFocus={() => setFocusedField('password')}
-                    onBlur={() => setFocusedField(null)}
                     style={{
                       width: '100%',
                       padding: '14px 16px',
@@ -474,13 +470,15 @@ export default function Signup({ setUser }){
                       fontWeight: '500',
                       boxSizing: 'border-box'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#f093fb'
-                      e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                    onFocus={e => {
+                      setFocusedField('password');
+                      e.target.style.borderColor = '#f093fb';
+                      e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                     }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#e5e7eb'
-                      e.target.style.boxShadow = 'none'
+                    onBlur={e => {
+                      setFocusedField(null);
+                      e.target.style.borderColor = '#e5e7eb';
+                      e.target.style.boxShadow = 'none';
                     }}
                   />
                   <button
@@ -527,8 +525,6 @@ export default function Signup({ setUser }){
                     onChange={e => setConfirmPassword(e.target.value)}
                     placeholder="Confirm password"
                     required
-                    onFocus={() => setFocusedField('confirmPassword')}
-                    onBlur={() => setFocusedField(null)}
                     style={{
                       width: '100%',
                       padding: '14px 16px',
@@ -542,13 +538,15 @@ export default function Signup({ setUser }){
                       fontWeight: '500',
                       boxSizing: 'border-box'
                     }}
-                    onFocus={(e) => {
-                      e.target.style.borderColor = '#f093fb'
-                      e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)'
+                    onFocus={e => {
+                      setFocusedField('confirmPassword');
+                      e.target.style.borderColor = '#f093fb';
+                      e.target.style.boxShadow = '0 0 0 4px rgba(240, 147, 251, 0.15)';
                     }}
-                    onBlur={(e) => {
-                      e.target.style.borderColor = '#e5e7eb'
-                      e.target.style.boxShadow = 'none'
+                    onBlur={e => {
+                      setFocusedField(null);
+                      e.target.style.borderColor = '#e5e7eb';
+                      e.target.style.boxShadow = 'none';
                     }}
                   />
                   <button

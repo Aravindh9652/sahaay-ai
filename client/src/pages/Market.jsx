@@ -2,14 +2,14 @@ import React, { useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const opportunities = [
-  { id: 1, title: 'Junior Developer', company: 'TechStart India', status: 'Open', category: 'Jobs', salary: '₹3-5 LPA', location: 'Bangalore', deadline: 'Mar 15', views: 2450, description: 'Join our growing team as a Junior Developer', icon: '💻' },
-  { id: 2, title: 'Content Writing Intern', company: 'Digital Solutions', status: 'Open', category: 'Internships', salary: 'Paid', location: 'Remote', deadline: 'Mar 10', views: 1820, description: 'Create engaging content for our blog', icon: '✍️' },
-  { id: 3, title: 'Women Entrepreneurship Grant', company: 'Government of India', status: 'ClosingSoon', category: 'Grants', salary: '₹1-5 Lakhs', location: 'All India', deadline: 'Feb 28', views: 5200, description: 'Financial support for women entrepreneurs', icon: '💼' },
-  { id: 4, title: 'Tech Scholarship 2026', company: 'IIT Alumni Network', status: 'Open', category: 'Scholarships', salary: 'Full Tuition', location: 'Various', deadline: 'Mar 20', views: 3150, description: 'Merit-based scholarship for tech education', icon: '🎓' },
-  { id: 5, title: 'Digital Marketing Executive', company: 'eBay India', status: 'Open', category: 'Jobs', salary: '₹2.5-4 LPA', location: 'Delhi', deadline: 'Mar 25', views: 1950, description: 'Drive digital marketing campaigns', icon: '📱' },
-  { id: 6, title: 'UI/UX Design Internship', company: 'Design Labs', status: 'Open', category: 'Internships', salary: '₹15k/month', location: 'Mumbai', deadline: 'Mar 12', views: 1340, description: 'Design beautiful user experiences', icon: '🎨' },
-  { id: 7, title: 'Agriculture Tech Innovation Grant', company: 'AgriTech Foundation', status: 'ClosingSoon', category: 'Grants', salary: '₹2-10 Lakhs', location: 'Rural Areas', deadline: 'Feb 26', views: 890, description: 'Support for agricultural technology projects', icon: '🌾' },
-  { id: 8, title: 'Data Science Scholarship', company: 'NASSCOM', status: 'Open', category: 'Scholarships', salary: 'Certification', location: 'Online', deadline: 'Mar 30', views: 4100, description: 'Industry-recognized data science certification', icon: '📊' }
+  { id: 1, title: 'Junior Developer', company: 'TechStart India', status: 'Open', category: 'Jobs', salary: '₹3-5 LPA', location: 'Bangalore', coords: { lat: 12.9716, lng: 77.5946 }, deadline: 'Mar 15', views: 2450, description: 'Join our growing team as a Junior Developer', icon: '💻', careerUrl: 'https://www.linkedin.com/jobs/search/?keywords=junior%20developer%20bangalore' },
+  { id: 2, title: 'Content Writing Intern', company: 'Digital Solutions', status: 'Open', category: 'Internships', salary: 'Paid', location: 'Remote', coords: { lat: 28.6139, lng: 77.2090 }, deadline: 'Mar 10', views: 1820, description: 'Create engaging content for our blog', icon: '✍️', careerUrl: 'https://www.linkedin.com/jobs/search/?keywords=content%20writing%20internship' },
+  { id: 3, title: 'Women Entrepreneurship Expo', company: 'Government of India', status: 'ClosingSoon', category: 'Grants', salary: '₹1-5 Lakhs', location: 'New Delhi', coords: { lat: 28.6139, lng: 77.2090 }, deadline: 'Feb 28', views: 5200, description: 'Financial support for women entrepreneurs', icon: '💼', careerUrl: 'https://www.startupindia.gov.in/women-entrepreneurs' },
+  { id: 4, title: 'Tech Education Grant', company: 'Multiple Partners', status: 'Open', category: 'Scholarships', salary: 'Full Tuition', location: 'India', coords: { lat: 20.5937, lng: 78.9629 }, deadline: 'Mar 20', views: 3150, description: 'Merit-based scholarship for tech education', icon: '🎓', careerUrl: 'https://www.scholarship.gov.in/' },
+  { id: 5, title: 'Digital Marketing Executive', company: 'E-Commerce Co', status: 'Open', category: 'Jobs', salary: '₹2.5-4 LPA', location: 'Delhi', coords: { lat: 28.7041, lng: 77.1025 }, deadline: 'Mar 25', views: 1950, description: 'Drive digital marketing campaigns', icon: '📱', careerUrl: 'https://www.linkedin.com/jobs/search/?keywords=marketing%20executive%20delhi' },
+  { id: 6, title: 'UI/UX Design Internship', company: 'Creative Studios', status: 'Open', category: 'Internships', salary: '₹15k/month', location: 'Mumbai', coords: { lat: 19.0760, lng: 72.8777 }, deadline: 'Mar 12', views: 1340, description: 'Design beautiful user experiences', icon: '🎨', careerUrl: 'https://www.linkedin.com/jobs/search/?keywords=ux%20design%20internship%20mumbai' },
+  { id: 7, title: 'Agriculture Startup Support', company: 'Innovation Fund', status: 'ClosingSoon', category: 'Grants', salary: '₹2-10 Lakhs', location: 'Pan India', coords: { lat: 20.5937, lng: 78.9629 }, deadline: 'Feb 26', views: 890, description: 'Support for agricultural technology projects', icon: '🌾', careerUrl: 'https://www.startupindia.gov.in/' },
+  { id: 8, title: 'Data Science Program', company: 'Tech Institute', status: 'Open', category: 'Scholarships', salary: 'Certification', location: 'Online', coords: { lat: 28.6139, lng: 77.2090 }, deadline: 'Mar 30', views: 4100, description: 'Industry-recognized data science certification', icon: '📊', careerUrl: 'https://www.coursera.org/learn/data-science' }
 ]
 
 export default function Market(){
@@ -19,6 +19,7 @@ export default function Market(){
   const [search, setSearch] = useState('')
   const [bookmarked, setBookmarked] = useState({})
   const [viewMode, setViewMode] = useState('grid')
+  const [selectedOpp, setSelectedOpp] = useState(null)
 
   const filtered = opportunities.filter(opp => {
     const matchesStatus = filter === 'All' || opp.status === filter
@@ -449,6 +450,7 @@ export default function Market(){
 
               {/* CTA Button */}
               <button
+                onClick={() => setSelectedOpp(opp)}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -549,6 +551,246 @@ export default function Market(){
           </div>
         </div>
       </div>
+
+      {/* Opportunity Detail Modal */}
+      {selectedOpp && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000,
+          padding: '20px'
+        }} onClick={() => setSelectedOpp(null)}>
+          <div style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: '40px',
+            maxWidth: '700px',
+            width: '100%',
+            maxHeight: '85vh',
+            overflow: 'auto',
+            boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+            animation: 'scaleIn 0.3s ease-out',
+            position: 'relative'
+          }} onClick={(e) => e.stopPropagation()}>
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedOpp(null)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'rgba(102, 126, 234, 0.1)',
+                color: '#667eea',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                fontSize: '24px',
+                cursor: 'pointer',
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(102, 126, 234, 0.2)'
+                e.target.style.transform = 'scale(1.1)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(102, 126, 234, 0.1)'
+                e.target.style.transform = 'scale(1)'
+              }}
+            >
+              ✕
+            </button>
+
+            {/* Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px' }}>
+              <div style={{
+                width: '64px',
+                height: '64px',
+                borderRadius: '12px',
+                background: 'linear-gradient(135deg, #667eea20, #667eea10)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '32px'
+              }}>
+                {selectedOpp.icon}
+              </div>
+              <div>
+                <h2 style={{ margin: '0 0 8px 0', fontSize: '1.8rem', fontWeight: '800', color: '#1f2937' }}>
+                  {selectedOpp.title}
+                </h2>
+                <p style={{ margin: 0, color: '#667eea', fontWeight: '600' }}>
+                  {selectedOpp.company}
+                </p>
+              </div>
+            </div>
+
+            <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', margin: '20px 0' }} />
+
+            {/* Category & Location */}
+            <div style={{
+              display: 'flex',
+              gap: '12px',
+              marginBottom: '24px',
+              flexWrap: 'wrap'
+            }}>
+              <span style={{
+                background: '#667eea15',
+                color: '#667eea',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.85rem',
+                fontWeight: '600'
+              }}>
+                {getCategoryIcon(selectedOpp.category)} {selectedOpp.category}
+              </span>
+              <span style={{
+                background: getStatusColor(selectedOpp.status) + '15',
+                color: getStatusColor(selectedOpp.status),
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.85rem',
+                fontWeight: '600'
+              }}>
+                {selectedOpp.status === 'ClosingSoon' ? '⏰ ' : '✓ '}{selectedOpp.status}
+              </span>
+              <span style={{
+                background: '#6b728015',
+                color: '#6b7280',
+                padding: '6px 12px',
+                borderRadius: '6px',
+                fontSize: '0.85rem',
+                fontWeight: '600'
+              }}>
+                📍 {selectedOpp.location}
+              </span>
+            </div>
+
+            {/* Description */}
+            <div style={{ marginBottom: '24px' }}>
+              <h3 style={{ color: '#667eea', marginTop: 0, marginBottom: '12px' }}>About This Opportunity</h3>
+              <p style={{ color: '#6b7280', lineHeight: '1.8', margin: 0 }}>
+                {selectedOpp.description}
+              </p>
+            </div>
+
+            {/* Details Grid */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '16px',
+              marginBottom: '24px',
+              padding: '20px',
+              background: '#f9fafb',
+              borderRadius: '12px'
+            }}>
+              <div>
+                <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Expected Salary/Prize</strong>
+                <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: '#667eea' }}>
+                  {selectedOpp.salary}
+                </p>
+              </div>
+              <div>
+                <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Deadline</strong>
+                <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: '#667eea' }}>
+                  {selectedOpp.deadline}
+                </p>
+              </div>
+              <div>
+                <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Views</strong>
+                <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: '#667eea' }}>
+                  {selectedOpp.views.toLocaleString()}
+                </p>
+              </div>
+            </div>
+
+            {/* Location Map */}
+            {selectedOpp.location !== 'Online' && (
+              <div style={{ marginBottom: '24px' }}>
+                <h3 style={{ color: '#667eea', marginTop: 0, marginBottom: '12px' }}>📍 Location</h3>
+                <div style={{
+                  width: '100%',
+                  height: '250px',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  border: '1px solid #e5e7eb'
+                }}>
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    frameBorder="0"
+                    style={{ border: 0 }}
+                    src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDYWN_3CeD3t1d6tPF5W5v9Z8_K8pV_U4w&q=${encodeURIComponent(selectedOpp.location)}&zoom=13`}
+                    allowFullScreen=""
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                  ></iframe>
+                </div>
+                <a 
+                  href={`https://www.google.com/maps/?q=${encodeURIComponent(selectedOpp.location)}`} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-block',
+                    marginTop: '12px',
+                    color: '#667eea',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    padding: '8px 12px',
+                    background: '#667eea15',
+                    borderRadius: '6px',
+                    transition: 'all 0.3s'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.background = '#667eea25'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.background = '#667eea15'
+                  }}
+                >
+                  🗺️ Open in Google Maps
+                </a>
+              </div>
+            )}
+
+            {/* Apply Button */}
+            <a href={selectedOpp.careerUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+              <button
+                style={{
+                  width: '100%',
+                  padding: '16px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  boxShadow: '0 8px 25px rgba(102,126,234,0.4)'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)'
+                  e.target.style.boxShadow = '0 12px 35px rgba(102,126,234,0.6)'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)'
+                  e.target.style.boxShadow = '0 8px 25px rgba(102,126,234,0.4)'
+                }}
+              >
+                🚀 Apply Now on {selectedOpp.company} Website
+              </button>
+            </a>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

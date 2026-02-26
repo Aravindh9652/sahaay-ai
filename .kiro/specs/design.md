@@ -68,31 +68,47 @@ SAHAAY is an AI-powered comprehensive platform that provides unified access to c
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 2.2 Technology Stack
+### 2.2 Technology Stack (Current + Production Ready)
 
 #### Frontend
-- **Framework**: React 18.2 with Vite build tool
+- **Framework**: React 18 with Vite 5.x/7.x
 - **Routing**: React Router v6
-- **State Management**: React Context API + Hooks
-- **Styling**: CSS Modules / Styled Components
-- **PDF Generation**: jsPDF
-- **Voice**: Web Speech API (SpeechRecognition, SpeechSynthesis)
-- **HTTP Client**: Fetch API / Axios
-- **Build Tool**: Vite (fast HMR, optimized builds)
+- **State Management**: React Context API + useReducer hooks
+- **Styling**: Pure CSS3 with responsive design & gradients
+- **APIs Integrated**:
+  - Google Maps Embed (location visualization)
+  - YouTube Embed (course videos with autoplay)
+  - Web Speech API (browser geolocation)
+- **Build Tool**: Vite (HMR, optimized bundles <100KB)
 
 #### Backend
 - **Runtime**: Node.js 16+
 - **Framework**: Express.js 4.x
-- **Authentication**: JWT (jsonwebtoken)
-- **Password Hashing**: bcryptjs
-- **CORS**: cors middleware
-- **Environment**: dotenv
-- **AI Integration**: OpenAI API
+- **Authentication**: JWT (7-day expiration)
+- **Security**: bcryptjs (10 salt rounds), crypto module for IDs
+- **Middleware**: CORS, JSON parsing
+- **Environment**: dotenv configuration
 
-#### Database (Future)
-- **Primary**: PostgreSQL (user data, transactions)
-- **Cache**: Redis (sessions, frequently accessed data)
-- **Search**: Elasticsearch (scheme search, full-text)
+#### Data Storage Layer - Dual Mode
+**AWS Production:**
+- **Amazon S3**: User JSON documents with auto-versioning
+- **AWS SDK (@aws-sdk/client-s3)**: Official integration
+- **Bucket Structure**:
+  ```
+  s3://bucket-name/
+  └── users.json (serialized user database)
+  ```
+
+**Non-AWS Development:**
+- **Node.js fs module**: Local file storage
+- **File Path**: `server/data/users.json`
+- **Auto-detection**: Switches to local if AWS credentials missing
+- **Perfect for**: Development, testing, offline use
+
+#### Future Database Options (Optional)
+- **PostgreSQL**: For complex queries and scalability
+- **Redis**: For session caching
+- **Elasticsearch**: For full-text search on schemes
 
 ## 3. Module Design
 
@@ -155,48 +171,41 @@ class AuthService {
 
 ### 3.2 Civic Hub Module
 
-#### 3.2.1 Data Models
-```typescript
-// Government Scheme
-interface GovernmentScheme {
-  id: string;
-  name: MultilingualText;
-  category: SchemeCategory;
-  description: MultilingualText;
-  benefits: MultilingualText;
-  eligibility: EligibilityCriteria;
-  documents: DocumentRequirement[];
-  applicationProcess: ApplicationStep[];
-  contactInfo: ContactInformation;
-  lastUpdated: Date;
-}
+#### 3.2.1 Current Implementation
+6 government schemes with verified URLs and external links:
 
-enum SchemeCategory {
-  AGRICULTURE = 'agriculture',
-  EDUCATION = 'education',
-  HEALTHCARE = 'healthcare',
-  EMPLOYMENT = 'employment',
-  HOUSING = 'housing',
-  SOCIAL_WELFARE = 'social_welfare'
+```javascript
+const scheme = {
+  id: 1,
+  name: 'PM Kisan Samman Nidhi',
+  category: 'Agriculture',
+  icon: '🌾',
+  color: '#10b981',
+  status: 'Active',
+  beneficiaries: '12.5 Crore',
+  amount: '₹2000/month',
+  description: 'Direct income support to farmer families',
+  eligibility: 'Farmers with landholding up to 2 hectares',
+  benefits: 'Quarterly cash transfer of ₹2000',
+  applyUrl: 'https://pmkisan.gov.in/'  // External government portal
 }
+```
 
-interface EligibilityCriteria {
-  ageRange?: { min: number; max: number };
-  incomeRange?: { max: number };
-  location?: string[];
-  category?: string[];
-  occupation?: string[];
-}
+**Schemes Available:**
+- PM Kisan (pmkisan.gov.in) - Agriculture support
+- Ayushman Bharat (pmjay.gov.in) - Healthcare
+- Skill India (nsdc.org.in) - Skill development
+- Swachh Bharat (swachhbharat.mygov.in) - Sanitation
+- Startup India (startupindia.gov.in) - Business support
+- Digital India (digitalindia.gov.in) - Tech infrastructure
 
-// Health Service
-interface HealthService {
-  id: string;
-  name: MultilingualText;
-  type: 'hospital' | 'clinic' | 'program';
-  location: Location;
-  contact: ContactInformation;
-  services: string[];
-}
+#### 3.2.2 UI Features
+- Initiative cards with color-coded categories
+- Search by scheme name
+- Filter by status (Active, Closing Soon, Closed)
+- Detail modal with full information
+- "Apply Now" button links to official portal
+- Responsive grid layout
 
 // Legal Resource
 interface LegalResource {
@@ -514,6 +523,131 @@ class PDFService {
   private addMarketActivity(doc: jsPDF, analytics: UserAnalytics): void
 }
 ```
+
+### 3.7 Resource Library Module (New)
+
+#### 3.7.1 Data Models
+```javascript
+// Resource Object
+const resource = {
+  id: 1,
+  name: 'National Central Library',
+  type: 'Library',           // Book, Library, Learning Center, Online Platform, Government Scheme, Study Group Center
+  description: 'India\'s premier library with 2.2 million volumes',
+  coords: { lat: 28.5921, lng: 77.2315 },  // Delhi coordinates
+  address: 'Pandit Jawaharlal Nehru Marg, New Delhi',
+  phone: '+91-11-2323-8531',
+  hours: '10 AM - 5 PM (Mon-Sat)',
+  courses: 15,
+  image: 'library-icon.png',
+  website: 'https://ncl.org.in'
+}
+
+// User Location Object
+const userLocation = {
+  latitude: 28.6139,
+  longitude: 77.2090,
+  accuracy: 50,  // meters
+  timestamp: new Date()
+}
+
+// Search Filters
+const searchFilters = {
+  radius: 50,           // kilometers
+  types: ['Library', 'Learning Center'],
+  searchTerm: ''
+}
+```
+
+#### 3.7.2 Geolocation Service
+```javascript
+class GeolocationService {
+  // Request browser location
+  static requestLocation() {
+    return new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          resolve({
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+            accuracy: position.coords.accuracy
+          });
+        },
+        (error) => reject(error)
+      );
+    });
+  }
+  
+  // Haversine formula - calculate distance between two points
+  static calculateDistance(lat1, lng1, lat2, lng2) {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = 
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return (R * c).toFixed(2); // distance in km
+  }
+  
+  // Filter resources by distance
+  static filterByDistance(userLat, userLng, resources, radiusKm) {
+    return resources.filter(resource => {
+      const distance = this.calculateDistance(
+        userLat, 
+        userLng, 
+        resource.coords.lat, 
+        resource.coords.lng
+      );
+      return distance <= radiusKm;
+    });
+  }
+}
+```
+
+#### 3.7.3 Resource Discovery Flow
+```
+User Opens Resources Page
+    ↓
+Request Geolocation Permission
+    ↓
+    ├─ Yes (Permission Granted)
+    │   ↓
+    │   Get User Coordinates
+    │   ↓
+    │   Calculate Distance to All Resources (Haversine)
+    │   ↓
+    │   Filter by Search Radius (default 50km)
+    │   ↓
+    │   Sort by Distance (nearest first)
+    │   ↓
+    │   Display List View with Distance Badges
+    │
+    └─ No (Permission Denied)
+        ↓
+        Show Fallback Message
+        Display All Resources Option
+        Allow Manual Location Entry (future)
+```
+
+#### 3.7.4 Resource Categories
+20 resources across 6 types located in 8+ Indian cities:
+- **Books** (3): Technical, literature, exam guides
+- **Libraries** (4): National, state, university libraries
+- **Learning Centers** (4): IITs, NITs, top engineering colleges
+- **Online Platforms** (5): NPTEL, Khan Academy, Coursera, edX, Udacity
+- **Government Schemes** (2): Skill India, Digital India programs
+- **Study Groups** (2): Community learning centers
+
+#### 3.7.5 UI Features
+- **Location Detection**: Click "Detect My Location" button
+- **Search Radius**: Adjustable slider (5-200 km) + quick buttons
+- **Type Filter**: Dropdown to filter by resource category
+- **List View**: Sorted by distance, showing distance badge
+- **Map View**: Embedded Google Maps with user location + resources
+- **Detail Modal**: Full resource info + embedded Google Maps
+- **Bookmark**: Save favorite resources (❤️ button)
 
 ## 4. API Design
 

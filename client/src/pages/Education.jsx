@@ -2,14 +2,14 @@ import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const courses = [
-  { id: 1, title: 'Digital Skills 101', category: 'Tech', level: 'Beginner', duration: '2 hours', icon: '💻', color: '#3b82f6', enrolled: 1250, progress: 65, description: 'Master fundamental digital literacy' },
-  { id: 2, title: 'Basic Accounting for Farmers', category: 'Business', level: 'Intermediate', duration: '3 hours', icon: '📊', color: '#10b981', enrolled: 890, progress: 0, description: 'Financial basics for agricultural entrepreneurs' },
-  { id: 3, title: 'Online Safety & Privacy', category: 'Tech', level: 'Beginner', duration: '1.5 hours', icon: '🔒', color: '#f59e0b', enrolled: 2100, progress: 45, description: 'Protect yourself online with best practices' },
-  { id: 4, title: 'Market Trends Analysis', category: 'Business', level: 'Advanced', duration: '4 hours', icon: '📈', color: '#8b5cf6', enrolled: 420, progress: 0, description: 'Analyze market data and make informed decisions' },
-  { id: 5, title: 'Resume Writing', category: 'Career', level: 'Beginner', duration: '2 hours', icon: '📄', color: '#ef4444', enrolled: 1560, progress: 80, description: 'Create a winning professional resume' },
-  { id: 6, title: 'Interview Preparation', category: 'Career', level: 'Intermediate', duration: '3 hours', icon: '🎯', color: '#06b6d4', enrolled: 980, progress: 0, description: 'Ace your next job interview with confidence' },
-  { id: 7, title: 'E-commerce Basics', category: 'Business', level: 'Beginner', duration: '2.5 hours', icon: '🛒', color: '#ec4899', enrolled: 750, progress: 30, description: 'Start your online business journey' },
-  { id: 8, title: 'Content Creation Masterclass', category: 'Tech', level: 'Intermediate', duration: '3.5 hours', icon: '📸', color: '#14b8a6', enrolled: 650, progress: 0, description: 'Create engaging content for social media' }
+  { id: 1, title: 'Digital Skills 101', category: 'Tech', level: 'Beginner', duration: '2 hours', icon: '💻', color: '#3b82f6', enrolled: 1250, progress: 65, description: 'Master fundamental digital literacy', youtubeId: 'w67LX0akI3c' },
+  { id: 2, title: 'Basic Accounting for Farmers', category: 'Business', level: 'Intermediate', duration: '3 hours', icon: '📊', color: '#10b981', enrolled: 890, progress: 0, description: 'Financial basics for agricultural entrepreneurs', youtubeId: 'V_qf1d5HUk4' },
+  { id: 3, title: 'Online Safety & Privacy', category: 'Tech', level: 'Beginner', duration: '1.5 hours', icon: '🔒', color: '#f59e0b', enrolled: 2100, progress: 45, description: 'Protect yourself online with best practices', youtubeId: 'HaXuMVjbOeo' },
+  { id: 4, title: 'Market Trends Analysis', category: 'Business', level: 'Advanced', duration: '4 hours', icon: '📈', color: '#8b5cf6', enrolled: 420, progress: 0, description: 'Analyze market data and make informed decisions', youtubeId: 'KRLzzRnkI5w' },
+  { id: 5, title: 'Resume Writing', category: 'Career', level: 'Beginner', duration: '2 hours', icon: '📄', color: '#ef4444', enrolled: 1560, progress: 80, description: 'Create a winning professional resume', youtubeId: 'y8OnoxKU3U' },
+  { id: 6, title: 'Interview Preparation', category: 'Career', level: 'Intermediate', duration: '3 hours', icon: '🎯', color: '#06b6d4', enrolled: 980, progress: 0, description: 'Ace your next job interview with confidence', youtubeId: 'X9XwYPaB_F4' },
+  { id: 7, title: 'E-commerce Basics', category: 'Business', level: 'Beginner', duration: '2.5 hours', icon: '🛒', color: '#ec4899', enrolled: 750, progress: 30, description: 'Start your online business journey', youtubeId: '4DKTJj9CPHE' },
+  { id: 8, title: 'Content Creation Masterclass', category: 'Tech', level: 'Intermediate', duration: '3.5 hours', icon: '📸', color: '#14b8a6', enrolled: 650, progress: 0, description: 'Create engaging content for social media', youtubeId: 'LWOdkI45cyc' }
 ]
 
 export default function Education(){
@@ -18,6 +18,7 @@ export default function Education(){
   const [search, setSearch] = useState('')
   const [bookmarked, setBookmarked] = useState({})
   const [hoveredCard, setHoveredCard] = useState(null)
+  const [selectedCourse, setSelectedCourse] = useState(null)
 
   const filtered = courses.filter(course => {
     const matchesFilter = filter === 'All' || course.category === filter
@@ -422,6 +423,7 @@ export default function Education(){
 
               {/* CTA Button */}
               <button
+                onClick={() => setSelectedCourse(course)}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -445,7 +447,7 @@ export default function Education(){
                   e.target.style.boxShadow = `0 8px 25px ${course.color}40`
                 }}
               >
-                {course.progress > 0 ? 'Continue Learning' : 'Start Learning'}
+                {course.progress > 0 ? 'Continue Learning' : 'Start Learning'} ▶️
               </button>
             </div>
           ))}
@@ -493,6 +495,183 @@ export default function Education(){
           </p>
         </div>
       </div>
+
+      {/* Video Modal */}
+      {selectedCourse && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.8)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 2000,
+          padding: '20px'
+        }} onClick={() => setSelectedCourse(null)}>
+          <div style={{
+            background: 'white',
+            borderRadius: '16px',
+            padding: '0',
+            maxWidth: '900px',
+            width: '100%',
+            maxHeight: '90vh',
+            overflow: 'auto',
+            boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+            animation: 'scaleIn 0.3s ease-out',
+            position: 'relative'
+          }} onClick={(e) => e.stopPropagation()}>
+            {/* Close Button */}
+            <button
+              onClick={() => setSelectedCourse(null)}
+              style={{
+                position: 'absolute',
+                top: '20px',
+                right: '20px',
+                background: 'rgba(0,0,0,0.5)',
+                color: 'white',
+                border: 'none',
+                borderRadius: '50%',
+                width: '40px',
+                height: '40px',
+                fontSize: '24px',
+                cursor: 'pointer',
+                zIndex: 10,
+                transition: 'all 0.3s'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(0,0,0,0.8)'
+                e.target.style.transform = 'scale(1.1)'
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'rgba(0,0,0,0.5)'
+                e.target.style.transform = 'scale(1)'
+              }}
+            >
+              ✕
+            </button>
+
+            {/* YouTube Video Container */}
+            <div style={{
+              width: '100%',
+              paddingBottom: '56.25%',
+              position: 'relative',
+              background: '#000'
+            }}>
+              <iframe
+                style={{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  width: '100%',
+                  height: '100%',
+                  border: 'none'
+                }}
+                src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}?autoplay=1`}
+                title={selectedCourse.title}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
+
+            {/* Course Info */}
+            <div style={{ padding: '32px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
+                <div style={{
+                  width: '64px',
+                  height: '64px',
+                  borderRadius: '12px',
+                  background: `linear-gradient(135deg, ${selectedCourse.color}20, ${selectedCourse.color}10)`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '32px'
+                }}>
+                  {selectedCourse.icon}
+                </div>
+                <div>
+                  <h2 style={{ margin: '0 0 8px 0', fontSize: '1.8rem', fontWeight: '800', color: '#1f2937' }}>
+                    {selectedCourse.title}
+                  </h2>
+                  <span style={{
+                    display: 'inline-block',
+                    background: `linear-gradient(135deg, ${selectedCourse.color}15, ${selectedCourse.color}05)`,
+                    color: selectedCourse.color,
+                    padding: '6px 12px',
+                    borderRadius: '6px',
+                    fontSize: '0.85rem',
+                    fontWeight: '600'
+                  }}>
+                    {selectedCourse.category} • {selectedCourse.level}
+                  </span>
+                </div>
+              </div>
+
+              <p style={{ margin: '0 0 20px 0', color: '#6b7280', fontSize: '1rem', lineHeight: '1.6' }}>
+                {selectedCourse.description}
+              </p>
+
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+                gap: '16px',
+                marginBottom: '24px',
+                padding: '20px',
+                background: '#f9fafb',
+                borderRadius: '12px'
+              }}>
+                <div>
+                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Duration</strong>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
+                    {selectedCourse.duration}
+                  </p>
+                </div>
+                <div>
+                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Enrolled</strong>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
+                    {selectedCourse.enrolled}+ Students
+                  </p>
+                </div>
+                <div>
+                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Level</strong>
+                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
+                    {selectedCourse.level}
+                  </p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setSelectedCourse(null)}
+                style={{
+                  width: '100%',
+                  padding: '14px',
+                  borderRadius: '12px',
+                  border: 'none',
+                  background: `linear-gradient(135deg, ${selectedCourse.color} 0%, ${selectedCourse.color}dd 100%)`,
+                  color: 'white',
+                  fontWeight: '700',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s',
+                  boxShadow: `0 8px 25px ${selectedCourse.color}40`
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.transform = 'translateY(-2px)'
+                  e.target.style.boxShadow = `0 12px 35px ${selectedCourse.color}60`
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.transform = 'translateY(0)'
+                  e.target.style.boxShadow = `0 8px 25px ${selectedCourse.color}40`
+                }}
+              >
+                ✓ Start This Course Now
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
