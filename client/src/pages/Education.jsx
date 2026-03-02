@@ -12,6 +12,24 @@ const courses = [
   { id: 8, title: 'Content Creation Masterclass', category: 'Tech', level: 'Intermediate', duration: '3.5 hours', icon: '📸', color: '#14b8a6', enrolled: 650, progress: 0, description: 'Create engaging content for social media', youtubeId: 'LWOdkI45cyc' }
 ]
 
+const allResources = [
+  { id: 1, type: 'Book', title: 'Digital India Handbook', author: 'Ministry of IT', icon: '📱', color: '#3b82f6', description: 'Digital transformation guide' },
+  { id: 2, type: 'Library', title: 'National Central Library', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '10 AM - 8 PM', description: '2 million books collection' },
+  { id: 3, type: 'Learning Center', title: 'IIT Delhi', author: 'Government', icon: '🎓', color: '#3b82f6', courses: 156, description: 'Premier engineering institute' },
+  { id: 4, type: 'Online Platform', title: 'NPTEL - Free Courses', author: 'IIT Madras', icon: '💻', color: '#667eea', courses: 14000, description: '14000+ engineering courses' },
+  { id: 5, type: 'Library', title: 'Agricultural Research Library', author: 'ICAR', icon: '🌾', color: '#10b981', hours: '9 AM - 5 PM', description: 'Agricultural research resources' },
+  { id: 6, type: 'Learning Center', title: 'Skill India Training', author: 'Government', icon: '🛠️', color: '#f59e0b', courses: 89, description: 'Vocational skill training' },
+  { id: 7, type: 'Library', title: 'Pune Library - Bhandarkar', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '9 AM - 5:30 PM', description: 'Rare books & manuscripts' },
+  { id: 8, type: 'Study Group Center', title: 'Anna Centenary Library', author: 'Government', icon: '👥', color: '#14b8a6', hours: '9 AM - 9 PM', description: 'Public study & research' },
+  { id: 9, type: 'Online Platform', title: 'Khan Academy India', author: 'Khan Academy', icon: '📱', color: '#06b6d4', description: 'Free educational videos' },
+  { id: 10, type: 'Learning Center', title: 'Mumbai Business Institute', author: 'Private', icon: '🏢', color: '#8b5cf6', courses: 42, description: 'Business education' },
+  { id: 11, type: 'Government Scheme', title: 'PM Skill Development', author: 'Government', icon: '🏛️', color: '#ef4444', description: 'Free skill training' },
+  { id: 12, type: 'Library', title: 'Cochin Public Library', author: 'Municipal', icon: '📚', color: '#22c55e', hours: '10 AM - 8 PM', description: 'Ancient & digital resources' },
+  { id: 13, type: 'Learning Center', title: 'Hyderabad University', author: 'Government', icon: '📚', color: '#667eea', courses: 210, description: 'University library' },
+  { id: 14, type: 'Online Platform', title: 'Coursera for Development', author: 'Coursera', icon: '🌐', color: '#667eea', courses: 5000, description: 'Online courses' },
+  { id: 15, type: 'Study Group Center', title: 'Bangalore Tech Community', author: 'Community', icon: '👥', color: '#667eea', hours: '6 PM - 9 PM', description: 'Tech study groups' }
+]
+
 export default function Education(){
   const { t } = useLanguage()
   const [filter, setFilter] = useState('All')
@@ -19,6 +37,7 @@ export default function Education(){
   const [bookmarked, setBookmarked] = useState({})
   const [hoveredCard, setHoveredCard] = useState(null)
   const [selectedCourse, setSelectedCourse] = useState(null)
+  const [selectedResource, setSelectedResource] = useState(null)
 
   const filtered = courses.filter(course => {
     const matchesFilter = filter === 'All' || course.category === filter
@@ -494,6 +513,63 @@ export default function Education(){
             Choose from {courses.length} courses and start your learning journey today. Each course is designed by industry experts to help you succeed.
           </p>
         </div>
+
+        <div style={{ marginTop: '40px' }}>
+          <h2 style={{
+            margin: '0 0 20px 0',
+            color: 'white',
+            fontSize: '2rem',
+            fontWeight: '800',
+            textAlign: 'center'
+          }}>
+            📚 All Learning Resources
+          </h2>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: '18px'
+          }}>
+            {allResources.map((resource, index) => (
+              <div
+                key={resource.id}
+                style={{
+                  animation: `scaleIn 0.4s ease-out ${0.04 * index}s forwards`,
+                  opacity: 0,
+                  background: 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(248,249,250,0.95) 100%)',
+                  borderRadius: '14px',
+                  padding: '18px',
+                  border: '1px solid rgba(102,126,234,0.15)',
+                  boxShadow: '0 18px 40px rgba(0,0,0,0.12)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => setSelectedResource(resource)}
+              >
+                <div style={{
+                  width: '46px',
+                  height: '46px',
+                  borderRadius: '10px',
+                  background: `${resource.color}20`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '24px',
+                  marginBottom: '10px'
+                }}>
+                  {resource.icon}
+                </div>
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.02rem', color: '#1f2937' }}>
+                  {resource.title}
+                </h3>
+                <p style={{ margin: '0 0 8px 0', color: '#667eea', fontWeight: '600', fontSize: '0.85rem' }}>
+                  {resource.type} • {resource.author}
+                </p>
+                <p style={{ margin: 0, color: '#6b7280', fontSize: '0.85rem', lineHeight: '1.5' }}>
+                  {resource.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Video Modal */}
@@ -668,6 +744,100 @@ export default function Education(){
               >
                 ✓ Start This Course Now
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {selectedResource && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.8)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 2000,
+            padding: '20px'
+          }}
+          onClick={() => setSelectedResource(null)}
+        >
+          <div
+            style={{
+              background: 'white',
+              borderRadius: '16px',
+              padding: '32px',
+              maxWidth: '560px',
+              width: '100%',
+              boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
+              animation: 'scaleIn 0.3s ease-out',
+              position: 'relative'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedResource(null)}
+              style={{
+                position: 'absolute',
+                top: '16px',
+                right: '16px',
+                background: 'rgba(102,126,234,0.1)',
+                color: '#667eea',
+                border: 'none',
+                borderRadius: '50%',
+                width: '36px',
+                height: '36px',
+                fontSize: '18px',
+                cursor: 'pointer'
+              }}
+            >
+              ✕
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
+              <div style={{
+                width: '58px',
+                height: '58px',
+                borderRadius: '10px',
+                background: `${selectedResource.color}20`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '32px'
+              }}>
+                {selectedResource.icon}
+              </div>
+              <div>
+                <h3 style={{ margin: '0 0 4px 0', color: '#1f2937', fontSize: '1.4rem' }}>
+                  {selectedResource.title}
+                </h3>
+                <p style={{ margin: 0, color: '#667eea', fontWeight: '600' }}>
+                  {selectedResource.type} • {selectedResource.author}
+                </p>
+              </div>
+            </div>
+
+            <p style={{ margin: '0 0 16px 0', color: '#6b7280', lineHeight: '1.7' }}>
+              {selectedResource.description}
+            </p>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
+              {selectedResource.hours && (
+                <div style={{ background: '#f9fafb', padding: '10px', borderRadius: '8px' }}>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#6b7280' }}>🕐 Hours</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: '#1f2937' }}>{selectedResource.hours}</p>
+                </div>
+              )}
+              {selectedResource.courses && (
+                <div style={{ background: '#f9fafb', padding: '10px', borderRadius: '8px' }}>
+                  <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#6b7280' }}>📖 Courses</p>
+                  <p style={{ margin: 0, fontWeight: '700', color: '#667eea' }}>{selectedResource.courses}+</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

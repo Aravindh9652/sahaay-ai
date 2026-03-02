@@ -6,7 +6,7 @@
     "passwordHash": "$2a$10$ihEe9Anw8mkVJLx5AlDgvO2zWuxHmmnbLIMS5w02CB2fuTHoG1nme",
     "verified": true,
     "createdAt": "2026-02-26T15:03:35.359Z",
-    "lastLogin": "2026-02-26T16:25:45.230Z",
+    "lastLogin": "2026-02-27T09:42:58.095Z",
     "profile": {
       "name": "Demo User",
       "email": "demo@sahaay.com",
@@ -85,6 +85,11 @@
         "type": "login",
         "description": "User logged in",
         "timestamp": "2026-02-26T16:25:45.230Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-02-27T09:42:58.095Z"
       }
     ]
   },
@@ -174,6 +179,48 @@
         "type": "signup",
         "description": "Account created successfully",
         "timestamp": "2026-02-26T16:23:23.131Z"
+      }
+    ]
+  },
+  "7a9eb2bb0a4f83da": {
+    "id": "7a9eb2bb0a4f83da",
+    "name": "Yagnesh",
+    "email": "kola@gmail.com",
+    "passwordHash": "$2a$10$3cMC3.IwNT2iUnvebn3AZ.Bp0LkFCU0ZUGq2Q06VhdBzB247soIES",
+    "verified": false,
+    "createdAt": "2026-02-28T04:09:41.451Z",
+    "lastLogin": "2026-02-28T04:09:41.451Z",
+    "profile": {
+      "name": "Yagnesh",
+      "email": "kola@gmail.com",
+      "phone": "1234567890",
+      "location": "vijayawada",
+      "language": "en",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=7a9eb2bb0a4f83da",
+      "bio": "",
+      "skills": [],
+      "interests": [],
+      "joinedDate": "2026-02-28T04:09:41.451Z",
+      "isActive": true
+    },
+    "progress": {
+      "education": {},
+      "market": {},
+      "civic": {},
+      "translate": {
+        "history": []
+      }
+    },
+    "bookmarks": {
+      "market": [],
+      "education": [],
+      "civic": []
+    },
+    "activity": [
+      {
+        "type": "signup",
+        "description": "Account created successfully",
+        "timestamp": "2026-02-28T04:09:41.451Z"
       }
     ]
   }

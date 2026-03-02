@@ -7,7 +7,6 @@ import Signup from './pages/Signup'
 import CivicHub from './pages/CivicHub'
 import Education from './pages/Education'
 import Market from './pages/Market'
-import Resources from './pages/Resources'
 import Translate from './pages/Translate'
 import Dashboard from './pages/Dashboard'
 import Profile from './pages/Profile'
@@ -84,7 +83,6 @@ function AppContent(){
               <Link to="/civic">{t('civic')}</Link>
               <Link to="/education">{t('learn')}</Link>
               <Link to="/market">{t('market')}</Link>
-              <Link to="/resources">📚 Resources</Link>
               <Link to="/translate">{t('translate')}</Link>
             </>
           )}
@@ -115,7 +113,6 @@ function AppContent(){
           <Route path="/civic" element={<CivicHub />} />
           <Route path="/education" element={<Education />} />
           <Route path="/market" element={<Market />} />
-          <Route path="/resources" element={<Resources />} />
           <Route path="/translate" element={<Translate />} />
           <Route path="/dashboard" element={user ? <Dashboard user={user} /> : <Login setUser={setUser} />} />
           <Route path="/profile" element={<Profile setUser={setUser} />} />

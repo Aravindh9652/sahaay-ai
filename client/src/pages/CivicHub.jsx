@@ -29,7 +29,7 @@ const civicInitiatives = [
     description: 'Health insurance for vulnerable families',
     eligibility: 'Families below certain income threshold',
     benefits: 'Free hospitalization up to ₹5 lakhs',
-    applyUrl: 'https://pmjay.gov.in/'
+    applyUrl: 'https://abdm.gov.in/'
   },
   {
     id: 3,
@@ -43,7 +43,7 @@ const civicInitiatives = [
     description: 'Vocational training and skill development',
     eligibility: 'Youth aged 15-45 years',
     benefits: 'Free skill training in various trades',
-    applyUrl: 'https://www.nsdc.org.in/'
+    applyUrl: 'https://www.skillindiadigital.gov.in/'
   },
   {
     id: 4,
@@ -98,11 +98,13 @@ export default function CivicHub({ user }) {
   const [searchQuery, setSearchQuery] = useState('')
 
   const categories = ['All', ...new Set(civicInitiatives.map(init => init.category))]
+  const likedCount = civicInitiatives.filter(init => bookmarked[init.id]).length
 
   const filtered = civicInitiatives.filter(init => {
-    const matchCategory = filter === 'All' || init.category === filter
+    const matchCategory = filter === 'All' || filter === 'Liked' || init.category === filter
+    const matchLiked = filter !== 'Liked' || Boolean(bookmarked[init.id])
     const matchSearch = searchQuery === '' || init.name.toLowerCase().includes(searchQuery.toLowerCase())
-    return matchCategory && matchSearch
+    return matchCategory && matchLiked && matchSearch
   })
 
   const toggleBookmark = (id) => {
@@ -117,11 +119,36 @@ export default function CivicHub({ user }) {
       position: 'relative'
     }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1 }}>
+        <div style={{
+          position: 'absolute',
+          top: '0',
+          right: '0',
+          zIndex: 2
+        }}>
+          <button
+            onClick={() => setFilter(filter === 'Liked' ? 'All' : 'Liked')}
+            style={{
+              padding: '10px 16px',
+              background: filter === 'Liked' ? '#ef4444' : '#fff',
+              color: filter === 'Liked' ? 'white' : '#ef4444',
+              border: '2px solid #ef4444',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontSize: '0.95rem',
+              transition: 'all 0.3s'
+            }}
+          >
+            {filter === 'Liked' ? `❤️ Showing Liked (${likedCount})` : `🤍 Liked Schemes (${likedCount})`}
+          </button>
+        </div>
+
         {/* Header */}
         <div style={{
           textAlign: 'center',
           color: 'white',
           marginBottom: '50px',
+          marginTop: '56px',
           animation: 'slideInDown 0.6s ease-out'
         }}>
           <h1 style={{
@@ -282,6 +309,22 @@ export default function CivicHub({ user }) {
             </div>
           ))}
         </div>
+
+        {filtered.length === 0 && (
+          <div style={{
+            background: 'rgba(255,255,255,0.95)',
+            borderRadius: '12px',
+            padding: '28px',
+            textAlign: 'center',
+            color: '#555',
+            marginBottom: '40px',
+            boxShadow: '0 8px 20px rgba(0,0,0,0.15)'
+          }}>
+            {filter === 'Liked'
+              ? 'No liked schemes yet. Tap the heart icon on any scheme to save it here.'
+              : 'No schemes match your current search/filter.'}
+          </div>
+        )}
 
         {/* Detail Modal */}
         {selectedInitiative && (
