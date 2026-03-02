@@ -6,7 +6,7 @@
     "passwordHash": "$2a$10$ihEe9Anw8mkVJLx5AlDgvO2zWuxHmmnbLIMS5w02CB2fuTHoG1nme",
     "verified": true,
     "createdAt": "2026-02-26T15:03:35.359Z",
-    "lastLogin": "2026-02-27T09:42:58.095Z",
+    "lastLogin": "2026-03-02T06:52:05.526Z",
     "profile": {
       "name": "Demo User",
       "email": "demo@sahaay.com",
@@ -14,7 +14,7 @@
       "location": "India",
       "language": "en",
       "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=demo_user_001",
-      "bio": "Welcome to SAHAAY! Explore government schemes and services.",
+      "bio": "Welcome to SAHAAY! Explore government schemes and",
       "skills": [
         "Research",
         "Learning"
@@ -36,9 +36,19 @@
       }
     },
     "bookmarks": {
-      "market": [],
-      "education": [],
-      "civic": []
+      "market": [
+        3
+      ],
+      "education": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "civic": [
+        1,
+        4
+      ]
     },
     "activity": [
       {
@@ -90,6 +100,126 @@
         "type": "login",
         "description": "User logged in",
         "timestamp": "2026-02-27T09:42:58.095Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-03-02T05:55:28.083Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-03-02T06:52:05.526Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T07:02:21.072Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T07:02:22.155Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T07:02:26.275Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added education bookmark",
+        "timestamp": "2026-03-02T08:10:51.341Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T08:26:17.064Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added education bookmark",
+        "timestamp": "2026-03-02T08:26:30.006Z"
+      },
+      {
+        "type": "profile_update",
+        "description": "Profile updated",
+        "timestamp": "2026-03-02T08:32:36.925Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T08:33:39.823Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T08:33:40.819Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:33:55.999Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:33:57.595Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:33:58.623Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:34:00.307Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:34:01.705Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Removed civic bookmark",
+        "timestamp": "2026-03-02T08:34:02.817Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T08:36:05.703Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added education bookmark",
+        "timestamp": "2026-03-02T08:36:28.273Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added civic bookmark",
+        "timestamp": "2026-03-02T08:39:15.293Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added education bookmark",
+        "timestamp": "2026-03-02T08:39:47.861Z"
+      },
+      {
+        "type": "bookmark",
+        "description": "Added market bookmark",
+        "timestamp": "2026-03-02T08:40:10.023Z"
+      },
+      {
+        "type": "profile_update",
+        "description": "Profile updated",
+        "timestamp": "2026-03-02T08:46:52.317Z"
+      },
+      {
+        "type": "profile_update",
+        "description": "Profile updated",
+        "timestamp": "2026-03-02T08:47:29.057Z"
       }
     ]
   },
@@ -221,6 +351,63 @@
         "type": "signup",
         "description": "Account created successfully",
         "timestamp": "2026-02-28T04:09:41.451Z"
+      }
+    ]
+  },
+  "3c4c211a13f8f3f5": {
+    "id": "3c4c211a13f8f3f5",
+    "name": "Bhaviri Sai charan",
+    "email": "bhavirisaicharan@gmail.com",
+    "passwordHash": "$2a$10$cokA.9MM1N4SMYo//J8bZeysTAjB5z7scIRKOy0NTAN86eYkvx4OK",
+    "verified": false,
+    "createdAt": "2026-03-02T05:56:51.349Z",
+    "lastLogin": "2026-03-02T06:21:27.716Z",
+    "profile": {
+      "name": "Bhaviri Sai charan",
+      "email": "bhavirisaicharan@gmail.com",
+      "phone": "",
+      "location": "",
+      "language": "en",
+      "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=3c4c211a13f8f3f5",
+      "bio": "",
+      "skills": [],
+      "interests": [],
+      "joinedDate": "2026-03-02T05:56:51.349Z",
+      "isActive": true
+    },
+    "progress": {
+      "education": {},
+      "market": {},
+      "civic": {},
+      "translate": {
+        "history": []
+      }
+    },
+    "bookmarks": {
+      "market": [],
+      "education": [],
+      "civic": []
+    },
+    "activity": [
+      {
+        "type": "signup",
+        "description": "Account created successfully",
+        "timestamp": "2026-03-02T05:56:51.349Z"
+      },
+      {
+        "type": "profile_update",
+        "description": "Profile updated",
+        "timestamp": "2026-03-02T06:07:43.277Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-03-02T06:11:35.763Z"
+      },
+      {
+        "type": "login",
+        "description": "User logged in",
+        "timestamp": "2026-03-02T06:21:27.716Z"
       }
     ]
   }

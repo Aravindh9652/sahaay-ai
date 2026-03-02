@@ -2,32 +2,32 @@ import React, { useState, useEffect } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const courses = [
-  { id: 1, title: 'Digital Skills 101', category: 'Tech', level: 'Beginner', duration: '2 hours', icon: '💻', color: '#3b82f6', enrolled: 1250, progress: 65, description: 'Master fundamental digital literacy', youtubeId: 'w67LX0akI3c' },
-  { id: 2, title: 'Basic Accounting for Farmers', category: 'Business', level: 'Intermediate', duration: '3 hours', icon: '📊', color: '#10b981', enrolled: 890, progress: 0, description: 'Financial basics for agricultural entrepreneurs', youtubeId: 'V_qf1d5HUk4' },
-  { id: 3, title: 'Online Safety & Privacy', category: 'Tech', level: 'Beginner', duration: '1.5 hours', icon: '🔒', color: '#f59e0b', enrolled: 2100, progress: 45, description: 'Protect yourself online with best practices', youtubeId: 'HaXuMVjbOeo' },
-  { id: 4, title: 'Market Trends Analysis', category: 'Business', level: 'Advanced', duration: '4 hours', icon: '📈', color: '#8b5cf6', enrolled: 420, progress: 0, description: 'Analyze market data and make informed decisions', youtubeId: 'KRLzzRnkI5w' },
-  { id: 5, title: 'Resume Writing', category: 'Career', level: 'Beginner', duration: '2 hours', icon: '📄', color: '#ef4444', enrolled: 1560, progress: 80, description: 'Create a winning professional resume', youtubeId: 'y8OnoxKU3U' },
-  { id: 6, title: 'Interview Preparation', category: 'Career', level: 'Intermediate', duration: '3 hours', icon: '🎯', color: '#06b6d4', enrolled: 980, progress: 0, description: 'Ace your next job interview with confidence', youtubeId: 'X9XwYPaB_F4' },
-  { id: 7, title: 'E-commerce Basics', category: 'Business', level: 'Beginner', duration: '2.5 hours', icon: '🛒', color: '#ec4899', enrolled: 750, progress: 30, description: 'Start your online business journey', youtubeId: '4DKTJj9CPHE' },
-  { id: 8, title: 'Content Creation Masterclass', category: 'Tech', level: 'Intermediate', duration: '3.5 hours', icon: '📸', color: '#14b8a6', enrolled: 650, progress: 0, description: 'Create engaging content for social media', youtubeId: 'LWOdkI45cyc' }
+  { id: 1, title: 'Digital Skills 101', category: 'Tech', level: 'Beginner', duration: '3:56:43 Hrs', icon: '💻', color: '#3b82f6', enrolled: 1250, progress: 65, description: 'Master fundamental digital literacy', youtubePlaylistId: 'PLms624yjnnfZJySkguNQUWFfnOcJaz3pf', youtubeUrl: 'https://youtube.com/playlist?list=PLms624yjnnfZJySkguNQUWFfnOcJaz3pf&si=Wrv-J0ySbjwRGayq' },
+  { id: 2, title: 'Basic Accounting for Farmers', category: 'Business', level: 'Intermediate', duration: '6:18:18 Hrs', icon: '📊', color: '#10b981', enrolled: 890, progress: 0, description: 'Financial basics for agricultural entrepreneurs', youtubePlaylistId: 'PLRmZEHdEjVHDZJm2A6FKPVBqZx2iC6YhZ', youtubeUrl: 'https://youtube.com/playlist?list=PLRmZEHdEjVHDZJm2A6FKPVBqZx2iC6YhZ&si=AJrGLXPXTzwfqyMN' },
+  { id: 3, title: 'Safety & Privacy', category: 'Tech', level: 'Beginner', duration: '24:28:14 Hrs', icon: '🔒', color: '#f59e0b', enrolled: 2100, progress: 45, description: 'Protect yourself online with best practices', youtubePlaylistId: 'PLyqSpQzTE6M-jkJEzbS5oHJUp2GWPsq6e', youtubeUrl: 'https://youtube.com/playlist?list=PLyqSpQzTE6M-jkJEzbS5oHJUp2GWPsq6e&si=ETQsN0XGvuqRpXki' },
+  { id: 4, title: 'Market Trends Analysis', category: 'Business', level: 'Advanced', duration: '30:23:34 Hrs', icon: '📈', color: '#8b5cf6', enrolled: 420, progress: 0, description: 'Analyze market data and make informed decisions', youtubePlaylistId: 'PL_Bj8MwxMrhpVCGjA2wuMjAntQ1lmQYKF', youtubeUrl: 'https://youtube.com/playlist?list=PL_Bj8MwxMrhpVCGjA2wuMjAntQ1lmQYKF&si=8nN_DQp5vGKNvyxo' },
+  { id: 5, title: 'Resume Writing', category: 'Career', level: 'Beginner', duration: '0:56:32 Hrs', icon: '📄', color: '#ef4444', enrolled: 1560, progress: 80, description: 'Create a winning professional resume', youtubePlaylistId: 'PLQTtMm0DzuqxNZGVLkPEo64wE5GcN-nUM', youtubeUrl: 'https://youtube.com/playlist?list=PLQTtMm0DzuqxNZGVLkPEo64wE5GcN-nUM&si=8Hohl3NK3tZ1MC_M' },
+  { id: 6, title: 'Interview Preparation', category: 'Career', level: 'Intermediate', duration: '6:42:52 Hrs', icon: '🎯', color: '#06b6d4', enrolled: 980, progress: 0, description: 'Ace your next job interview with confidence', youtubePlaylistId: 'PL1LKqasc92SjIGbIVoMOhC26P7OISx4tM', youtubeUrl: 'https://youtube.com/playlist?list=PL1LKqasc92SjIGbIVoMOhC26P7OISx4tM&si=5j93jfHwZQO0Zzr-' },
+  { id: 7, title: 'E-commerce Basics', category: 'Business', level: 'Beginner', duration: '26:50:47 Hrs', icon: '🛒', color: '#ec4899', enrolled: 750, progress: 30, description: 'Start your online business journey', youtubePlaylistId: 'PL8SmFe2l7_h2xt07uuVw4USeoT2RgUmpE', youtubeUrl: 'https://youtube.com/playlist?list=PL8SmFe2l7_h2xt07uuVw4USeoT2RgUmpE&si=i0LlcXvkiqp3JaNr' },
+  { id: 8, title: 'Content Creation Masterclass', category: 'Tech', level: 'Intermediate', duration: '5:10:53 Hrs', icon: '📸', color: '#14b8a6', enrolled: 650, progress: 0, description: 'Create engaging content for social media', youtubePlaylistId: 'PLW-zSkCnZ-gDgc_YNSC7uCaYNLoMwLPp8', youtubeUrl: 'https://youtube.com/playlist?list=PLW-zSkCnZ-gDgc_YNSC7uCaYNLoMwLPp8&si=zzXJrTZHMi9wY1Kc' }
 ]
 
 const allResources = [
-  { id: 1, type: 'Book', title: 'Digital India Handbook', author: 'Ministry of IT', icon: '📱', color: '#3b82f6', description: 'Digital transformation guide' },
-  { id: 2, type: 'Library', title: 'National Central Library', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '10 AM - 8 PM', description: '2 million books collection' },
-  { id: 3, type: 'Learning Center', title: 'IIT Delhi', author: 'Government', icon: '🎓', color: '#3b82f6', courses: 156, description: 'Premier engineering institute' },
-  { id: 4, type: 'Online Platform', title: 'NPTEL - Free Courses', author: 'IIT Madras', icon: '💻', color: '#667eea', courses: 14000, description: '14000+ engineering courses' },
-  { id: 5, type: 'Library', title: 'Agricultural Research Library', author: 'ICAR', icon: '🌾', color: '#10b981', hours: '9 AM - 5 PM', description: 'Agricultural research resources' },
-  { id: 6, type: 'Learning Center', title: 'Skill India Training', author: 'Government', icon: '🛠️', color: '#f59e0b', courses: 89, description: 'Vocational skill training' },
-  { id: 7, type: 'Library', title: 'Pune Library - Bhandarkar', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '9 AM - 5:30 PM', description: 'Rare books & manuscripts' },
-  { id: 8, type: 'Study Group Center', title: 'Anna Centenary Library', author: 'Government', icon: '👥', color: '#14b8a6', hours: '9 AM - 9 PM', description: 'Public study & research' },
-  { id: 9, type: 'Online Platform', title: 'Khan Academy India', author: 'Khan Academy', icon: '📱', color: '#06b6d4', description: 'Free educational videos' },
-  { id: 10, type: 'Learning Center', title: 'Mumbai Business Institute', author: 'Private', icon: '🏢', color: '#8b5cf6', courses: 42, description: 'Business education' },
-  { id: 11, type: 'Government Scheme', title: 'PM Skill Development', author: 'Government', icon: '🏛️', color: '#ef4444', description: 'Free skill training' },
-  { id: 12, type: 'Library', title: 'Cochin Public Library', author: 'Municipal', icon: '📚', color: '#22c55e', hours: '10 AM - 8 PM', description: 'Ancient & digital resources' },
-  { id: 13, type: 'Learning Center', title: 'Hyderabad University', author: 'Government', icon: '📚', color: '#667eea', courses: 210, description: 'University library' },
-  { id: 14, type: 'Online Platform', title: 'Coursera for Development', author: 'Coursera', icon: '🌐', color: '#667eea', courses: 5000, description: 'Online courses' },
-  { id: 15, type: 'Study Group Center', title: 'Bangalore Tech Community', author: 'Community', icon: '👥', color: '#667eea', hours: '6 PM - 9 PM', description: 'Tech study groups' }
+  { id: 1, type: 'Book', title: 'Digital India Handbook', author: 'Ministry of IT', icon: '📱', color: '#3b82f6', description: 'Digital transformation guide', website: 'https://www.digitalindia.gov.in' },
+  { id: 2, type: 'Library', title: 'National Central Library', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '10 AM - 8 PM', description: '2 million books collection', website: 'https://nationallibrary.gov.in' },
+  { id: 3, type: 'Learning Center', title: 'IIT Delhi', author: 'Government', icon: '🎓', color: '#3b82f6', courses: 156, description: 'Premier engineering institute', website: 'https://home.iitd.ac.in' },
+  { id: 4, type: 'Online Platform', title: 'NPTEL - Free Courses', author: 'IIT Madras', icon: '💻', color: '#667eea', courses: 14000, description: '14000+ engineering courses', website: 'https://nptel.ac.in' },
+  { id: 5, type: 'Library', title: 'Agricultural Research Library', author: 'ICAR', icon: '🌾', color: '#10b981', hours: '9 AM - 5 PM', description: 'Agricultural research resources', website: 'https://icar.org.in' },
+  { id: 6, type: 'Learning Center', title: 'Skill India Training', author: 'Government', icon: '🛠️', color: '#f59e0b', courses: 89, description: 'Vocational skill training', website: 'https://www.skillindia.gov.in' },
+  { id: 7, type: 'Library', title: 'Pune Library - Bhandarkar', author: 'Government', icon: '📚', color: '#8b5cf6', hours: '9 AM - 5:30 PM', description: 'Rare books & manuscripts', website: 'https://www.bori.ac.in' },
+  { id: 8, type: 'Study Group Center', title: 'Anna Centenary Library', author: 'Government', icon: '👥', color: '#14b8a6', hours: '9 AM - 9 PM', description: 'Public study & research', website: 'https://www.annacentenarylibrary.org' },
+  { id: 9, type: 'Online Platform', title: 'Khan Academy India', author: 'Khan Academy', icon: '📱', color: '#06b6d4', description: 'Free educational videos', website: 'https://www.khanacademy.org' },
+  { id: 10, type: 'Learning Center', title: 'Mumbai Business Institute', author: 'Private', icon: '🏢', color: '#8b5cf6', courses: 42, description: 'Business education', website: 'https://www.mu.ac.in' },
+  { id: 11, type: 'Government Scheme', title: 'PM Skill Development', author: 'Government', icon: '🏛️', color: '#ef4444', description: 'Free skill training', website: 'https://www.pmkvyofficial.org' },
+  { id: 12, type: 'Library', title: 'Cochin Public Library', author: 'Municipal', icon: '📚', color: '#22c55e', hours: '10 AM - 8 PM', description: 'Ancient & digital resources', website: 'https://www.kochicorporation.lsgkerala.gov.in' },
+  { id: 13, type: 'Learning Center', title: 'Hyderabad University', author: 'Government', icon: '📚', color: '#667eea', courses: 210, description: 'University library', website: 'https://www.uohyd.ac.in' },
+  { id: 14, type: 'Online Platform', title: 'Coursera for Development', author: 'Coursera', icon: '🌐', color: '#667eea', courses: 5000, description: 'Online courses', website: 'https://www.coursera.org' },
+  { id: 15, type: 'Study Group Center', title: 'Bangalore Tech Community', author: 'Community', icon: '👥', color: '#667eea', hours: '6 PM - 9 PM', description: 'Tech study groups', website: 'https://www.meetup.com/find/?keywords=bangalore%20tech' }
 ]
 
 export default function Education(){
@@ -36,18 +36,113 @@ export default function Education(){
   const [search, setSearch] = useState('')
   const [bookmarked, setBookmarked] = useState({})
   const [hoveredCard, setHoveredCard] = useState(null)
-  const [selectedCourse, setSelectedCourse] = useState(null)
-  const [selectedResource, setSelectedResource] = useState(null)
+
+  const getToken = () => {
+    try {
+      const raw = localStorage.getItem('sahaay_token')
+      const parsed = raw ? JSON.parse(raw) : null
+      return parsed?.token || null
+    } catch {
+      return null
+    }
+  }
+
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      const token = getToken()
+      if (!token) return
+
+      try {
+        const res = await fetch('/api/auth/bookmarks', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const data = await res.json()
+        if (!res.ok || !data?.bookmarks?.education) return
+
+        const initial = {}
+        data.bookmarks.education.forEach((id) => {
+          initial[id] = true
+        })
+        setBookmarked(initial)
+      } catch (error) {
+        console.error('Failed to load education bookmarks:', error)
+      }
+    }
+
+    loadBookmarks()
+  }, [])
 
   const filtered = courses.filter(course => {
-    const matchesFilter = filter === 'All' || course.category === filter
+    const matchesFilter = filter === 'All' || filter === 'Liked' || course.category === filter
+    const matchesLiked = filter !== 'Liked' || Boolean(bookmarked[course.id])
     const matchesSearch = course.title.toLowerCase().includes(search.toLowerCase()) || 
                          course.description.toLowerCase().includes(search.toLowerCase())
-    return matchesFilter && matchesSearch
+    return matchesFilter && matchesLiked && matchesSearch
   })
 
-  const toggleBookmark = (id) => {
-    setBookmarked(b => ({...b, [id]: !b[id]}))
+  const likedCount = courses.filter((course) => bookmarked[course.id]).length
+
+  const toggleBookmark = async (id) => {
+    const token = getToken()
+    const currentlyLiked = Boolean(bookmarked[id])
+
+    setBookmarked((previous) => ({ ...previous, [id]: !currentlyLiked }))
+
+    if (!token) return
+
+    try {
+      const response = await fetch('/api/auth/bookmarks', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'education',
+          itemId: id,
+          action: currentlyLiked ? 'remove' : 'add'
+        })
+      })
+
+      if (!response.ok) {
+        setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      }
+    } catch (error) {
+      setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      console.error('Failed to update education bookmark:', error)
+    }
+  }
+
+  const logActivity = async (payload) => {
+    const token = getToken()
+    if (!token) return
+
+    try {
+      await fetch('/api/auth/activity', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+    } catch (error) {
+      console.error('Failed to log education activity:', error)
+    }
+  }
+
+  const handleStartCourse = (course) => {
+    window.open(course.youtubeUrl, '_blank', 'noopener,noreferrer')
+    logActivity({
+      type: 'recent_access',
+      description: `Started course: ${course.title}`,
+      metadata: {
+        category: 'education',
+        itemId: course.id,
+        itemTitle: course.title,
+        action: 'start_course'
+      }
+    })
   }
 
   const getLevelColor = (level) => {
@@ -143,11 +238,30 @@ export default function Education(){
       }}></div>
 
       <div style={{maxWidth: '1200px', margin: '0 auto', position: 'relative', zIndex: 1}}>
+        <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 2 }}>
+          <button
+            onClick={() => setFilter(filter === 'Liked' ? 'All' : 'Liked')}
+            style={{
+              padding: '10px 16px',
+              background: filter === 'Liked' ? '#ef4444' : '#fff',
+              color: filter === 'Liked' ? 'white' : '#ef4444',
+              border: '2px solid #ef4444',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontSize: '0.95rem',
+              transition: 'all 0.3s'
+            }}
+          >
+            {filter === 'Liked' ? `❤️ Showing Liked (${likedCount})` : `🤍 Liked Courses (${likedCount})`}
+          </button>
+        </div>
 
         {/* Hero Section */}
         <div style={{
           animation: 'slideInDown 0.8s ease-out forwards',
-          marginBottom: '40px'
+          marginBottom: '40px',
+          marginTop: '56px'
         }}>
           <h1 style={{
             fontSize: '3.5rem',
@@ -158,7 +272,7 @@ export default function Education(){
             marginBottom: '16px',
             textAlign: 'center'
           }}>
-            📚 {t('educationTitle') || 'Learning Hub'}
+             {t('educationTitle') || 'Learning Hub'}
           </h1>
           <p style={{
             fontSize: '1.2rem',
@@ -410,39 +524,11 @@ export default function Education(){
                 }}>
                   {course.level}
                 </span>
-                {course.progress > 0 && (
-                  <span style={{
-                    fontSize: '0.85rem',
-                    fontWeight: '600',
-                    color: course.color
-                  }}>
-                    {course.progress}% complete
-                  </span>
-                )}
               </div>
-
-              {/* Progress Bar */}
-              {course.progress > 0 && (
-                <div style={{
-                  height: '4px',
-                  background: '#e5e7eb',
-                  borderRadius: '2px',
-                  overflow: 'hidden',
-                  marginBottom: '16px'
-                }}>
-                  <div style={{
-                    height: '100%',
-                    background: `linear-gradient(90deg, ${course.color}, ${course.color}cc)`,
-                    width: `${course.progress}%`,
-                    transition: 'width 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-                    boxShadow: `0 0 10px ${course.color}60`
-                  }}></div>
-                </div>
-              )}
 
               {/* CTA Button */}
               <button
-                onClick={() => setSelectedCourse(course)}
+                onClick={() => handleStartCourse(course)}
                 style={{
                   width: '100%',
                   padding: '12px',
@@ -466,7 +552,7 @@ export default function Education(){
                   e.target.style.boxShadow = `0 8px 25px ${course.color}40`
                 }}
               >
-                {course.progress > 0 ? 'Continue Learning' : 'Start Learning'} ▶️
+                Start Learning ▶️
               </button>
             </div>
           ))}
@@ -480,7 +566,9 @@ export default function Education(){
           }}>
             <div style={{fontSize: '48px', marginBottom: '16px'}}>🤔</div>
             <h3 style={{color: 'white', fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px'}}>No courses found</h3>
-            <p style={{color: 'rgba(255,255,255,0.9)'}}>Try adjusting your search or filters</p>
+            <p style={{color: 'rgba(255,255,255,0.9)'}}>
+              {filter === 'Liked' ? 'No liked courses yet. Tap the heart icon on any course to save it here.' : 'Try adjusting your search or filters'}
+            </p>
           </div>
         )}
 
@@ -542,7 +630,7 @@ export default function Education(){
                   boxShadow: '0 18px 40px rgba(0,0,0,0.12)',
                   cursor: 'pointer'
                 }}
-                onClick={() => setSelectedResource(resource)}
+                onClick={() => window.open(resource.website, '_blank', 'noopener,noreferrer')}
               >
                 <div style={{
                   width: '46px',
@@ -557,8 +645,16 @@ export default function Education(){
                 }}>
                   {resource.icon}
                 </div>
-                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.02rem', color: '#1f2937' }}>
-                  {resource.title}
+                <h3 style={{ margin: '0 0 6px 0', fontSize: '1.02rem' }}>
+                  <a
+                    href={resource.website}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                    style={{ color: '#1f2937', textDecoration: 'none' }}
+                  >
+                    {resource.title}
+                  </a>
                 </h3>
                 <p style={{ margin: '0 0 8px 0', color: '#667eea', fontWeight: '600', fontSize: '0.85rem' }}>
                   {resource.type} • {resource.author}
@@ -566,282 +662,14 @@ export default function Education(){
                 <p style={{ margin: 0, color: '#6b7280', fontSize: '0.85rem', lineHeight: '1.5' }}>
                   {resource.description}
                 </p>
+                <p style={{ margin: '10px 0 0 0', color: '#667eea', fontSize: '0.82rem', fontWeight: '600' }}>
+                  Visit website ↗
+                </p>
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Video Modal */}
-      {selectedCourse && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0,0,0,0.8)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 2000,
-          padding: '20px'
-        }} onClick={() => setSelectedCourse(null)}>
-          <div style={{
-            background: 'white',
-            borderRadius: '16px',
-            padding: '0',
-            maxWidth: '900px',
-            width: '100%',
-            maxHeight: '90vh',
-            overflow: 'auto',
-            boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
-            animation: 'scaleIn 0.3s ease-out',
-            position: 'relative'
-          }} onClick={(e) => e.stopPropagation()}>
-            {/* Close Button */}
-            <button
-              onClick={() => setSelectedCourse(null)}
-              style={{
-                position: 'absolute',
-                top: '20px',
-                right: '20px',
-                background: 'rgba(0,0,0,0.5)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                fontSize: '24px',
-                cursor: 'pointer',
-                zIndex: 10,
-                transition: 'all 0.3s'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.background = 'rgba(0,0,0,0.8)'
-                e.target.style.transform = 'scale(1.1)'
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.background = 'rgba(0,0,0,0.5)'
-                e.target.style.transform = 'scale(1)'
-              }}
-            >
-              ✕
-            </button>
-
-            {/* YouTube Video Container */}
-            <div style={{
-              width: '100%',
-              paddingBottom: '56.25%',
-              position: 'relative',
-              background: '#000'
-            }}>
-              <iframe
-                style={{
-                  position: 'absolute',
-                  top: '0',
-                  left: '0',
-                  width: '100%',
-                  height: '100%',
-                  border: 'none'
-                }}
-                src={`https://www.youtube.com/embed/${selectedCourse.youtubeId}?autoplay=1`}
-                title={selectedCourse.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-
-            {/* Course Info */}
-            <div style={{ padding: '32px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '20px' }}>
-                <div style={{
-                  width: '64px',
-                  height: '64px',
-                  borderRadius: '12px',
-                  background: `linear-gradient(135deg, ${selectedCourse.color}20, ${selectedCourse.color}10)`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '32px'
-                }}>
-                  {selectedCourse.icon}
-                </div>
-                <div>
-                  <h2 style={{ margin: '0 0 8px 0', fontSize: '1.8rem', fontWeight: '800', color: '#1f2937' }}>
-                    {selectedCourse.title}
-                  </h2>
-                  <span style={{
-                    display: 'inline-block',
-                    background: `linear-gradient(135deg, ${selectedCourse.color}15, ${selectedCourse.color}05)`,
-                    color: selectedCourse.color,
-                    padding: '6px 12px',
-                    borderRadius: '6px',
-                    fontSize: '0.85rem',
-                    fontWeight: '600'
-                  }}>
-                    {selectedCourse.category} • {selectedCourse.level}
-                  </span>
-                </div>
-              </div>
-
-              <p style={{ margin: '0 0 20px 0', color: '#6b7280', fontSize: '1rem', lineHeight: '1.6' }}>
-                {selectedCourse.description}
-              </p>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-                gap: '16px',
-                marginBottom: '24px',
-                padding: '20px',
-                background: '#f9fafb',
-                borderRadius: '12px'
-              }}>
-                <div>
-                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Duration</strong>
-                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
-                    {selectedCourse.duration}
-                  </p>
-                </div>
-                <div>
-                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Enrolled</strong>
-                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
-                    {selectedCourse.enrolled}+ Students
-                  </p>
-                </div>
-                <div>
-                  <strong style={{ color: '#6b7280', fontSize: '0.85rem' }}>Level</strong>
-                  <p style={{ margin: '8px 0 0 0', fontSize: '1.1rem', fontWeight: '700', color: selectedCourse.color }}>
-                    {selectedCourse.level}
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setSelectedCourse(null)}
-                style={{
-                  width: '100%',
-                  padding: '14px',
-                  borderRadius: '12px',
-                  border: 'none',
-                  background: `linear-gradient(135deg, ${selectedCourse.color} 0%, ${selectedCourse.color}dd 100%)`,
-                  color: 'white',
-                  fontWeight: '700',
-                  fontSize: '1rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s',
-                  boxShadow: `0 8px 25px ${selectedCourse.color}40`
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.transform = 'translateY(-2px)'
-                  e.target.style.boxShadow = `0 12px 35px ${selectedCourse.color}60`
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.transform = 'translateY(0)'
-                  e.target.style.boxShadow = `0 8px 25px ${selectedCourse.color}40`
-                }}
-              >
-                ✓ Start This Course Now
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {selectedResource && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-            padding: '20px'
-          }}
-          onClick={() => setSelectedResource(null)}
-        >
-          <div
-            style={{
-              background: 'white',
-              borderRadius: '16px',
-              padding: '32px',
-              maxWidth: '560px',
-              width: '100%',
-              boxShadow: '0 25px 50px rgba(0,0,0,0.4)',
-              animation: 'scaleIn 0.3s ease-out',
-              position: 'relative'
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedResource(null)}
-              style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                background: 'rgba(102,126,234,0.1)',
-                color: '#667eea',
-                border: 'none',
-                borderRadius: '50%',
-                width: '36px',
-                height: '36px',
-                fontSize: '18px',
-                cursor: 'pointer'
-              }}
-            >
-              ✕
-            </button>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '16px' }}>
-              <div style={{
-                width: '58px',
-                height: '58px',
-                borderRadius: '10px',
-                background: `${selectedResource.color}20`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '32px'
-              }}>
-                {selectedResource.icon}
-              </div>
-              <div>
-                <h3 style={{ margin: '0 0 4px 0', color: '#1f2937', fontSize: '1.4rem' }}>
-                  {selectedResource.title}
-                </h3>
-                <p style={{ margin: 0, color: '#667eea', fontWeight: '600' }}>
-                  {selectedResource.type} • {selectedResource.author}
-                </p>
-              </div>
-            </div>
-
-            <p style={{ margin: '0 0 16px 0', color: '#6b7280', lineHeight: '1.7' }}>
-              {selectedResource.description}
-            </p>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
-              {selectedResource.hours && (
-                <div style={{ background: '#f9fafb', padding: '10px', borderRadius: '8px' }}>
-                  <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#6b7280' }}>🕐 Hours</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#1f2937' }}>{selectedResource.hours}</p>
-                </div>
-              )}
-              {selectedResource.courses && (
-                <div style={{ background: '#f9fafb', padding: '10px', borderRadius: '8px' }}>
-                  <p style={{ margin: '0 0 4px 0', fontSize: '0.8rem', color: '#6b7280' }}>📖 Courses</p>
-                  <p style={{ margin: 0, fontWeight: '700', color: '#667eea' }}>{selectedResource.courses}+</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import { BrowserRouter, Routes, Route, Link, useNavigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link, useNavigate, useLocation } from 'react-router-dom'
 import { LanguageProvider, useLanguage } from './i18n/LanguageContext'
 import Home from './pages/Home'
 import Login from './pages/Login'
@@ -16,6 +16,8 @@ function AppContent(){
   const [user, setUser] = useState(null)
   const { language, setLanguage, t } = useLanguage()
   const navigate = useNavigate()
+  const location = useLocation()
+  const hideLanguageSelector = location.pathname === '/profile'
 
   useEffect(() => {
     // Update HTML lang attribute when language changes
@@ -88,9 +90,7 @@ function AppContent(){
           )}
         </div>
         <div className="nav-right">
-          <select value={language} onChange={e => setLanguage(e.target.value)} className="lang-select">
-            {languages.map(l => <option key={l.code} value={l.code}>{l.name}</option>)}
-          </select>
+   
           {user ? (
             <>
               <Link to="/dashboard" className="nav-link">👤 {t('dashboard')}</Link>

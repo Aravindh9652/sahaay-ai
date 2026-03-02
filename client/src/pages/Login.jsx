@@ -57,19 +57,44 @@ export default function Login({ setUser }){
   const [focusedField, setFocusedField] = useState(null)
   const navigate = useNavigate()
 
+  const parseJsonSafely = async (response) => {
+    try {
+      return await response.json()
+    } catch {
+      return null
+    }
+  }
+
   const handleLogin = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({email, password})
-      })
-      const data = await res.json()
 
-      if (data.ok) {
+    const endpoints = ['/api/auth/login', 'http://localhost:5000/api/auth/login']
+    let data = null
+    let response = null
+
+    try {
+      for (const endpoint of endpoints) {
+        try {
+          response = await fetch(endpoint, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({email, password})
+          })
+          data = await parseJsonSafely(response)
+          if (response) break
+        } catch {
+          response = null
+        }
+      }
+
+      if (!response) {
+        setError('Cannot reach the server. Please start backend with: cd server && npm run dev')
+        return
+      }
+
+      if (data?.ok) {
         const user = {
           id: data.user.id,
           name: data.user.name,
@@ -80,16 +105,16 @@ export default function Login({ setUser }){
         localStorage.setItem('sahaay_token', JSON.stringify(user))
         setUser(user)
         navigate('/dashboard')
-      } else if (data.userNotFound) {
+      } else if (data?.userNotFound) {
         setError(t('accountNotFound'))
         setTimeout(() => {
           navigate('/signup', { state: { email } })
         }, 1500)
       } else {
-        setError(data.error || t('invalidPassword'))
+        setError(data?.error || t('invalidPassword'))
       }
     } catch (err) {
-      setError('Network error. Please check your connection and try again.')
+      setError('Sign in failed. Please try again.')
     } finally {
       setLoading(false)
     }

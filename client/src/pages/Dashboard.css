@@ -1,0 +1,338 @@
+.dashboard-shell {
+  --db-page-bg: linear-gradient(135deg, #eef2ff 0%, #ede9fe 55%, #fdf2f8 100%);
+  --db-card-bg: rgba(255, 255, 255, 0.92);
+  --db-border: rgba(99, 102, 241, 0.25);
+  --db-heading: #312e81;
+  --db-text: #334155;
+  --db-muted: #64748b;
+  --db-accent: #4f46e5;
+  --db-accent-soft: rgba(79, 70, 229, 0.12);
+
+  min-height: 100vh;
+  padding: 28px 16px;
+  background: var(--db-page-bg);
+  transition: background 0.8s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-shell::before,
+.dashboard-shell::after {
+  content: '';
+  position: fixed;
+  width: 420px;
+  height: 420px;
+  border-radius: 999px;
+  filter: blur(40px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dashboard-shell::before {
+  top: -140px;
+  right: -120px;
+  background: radial-gradient(circle, var(--db-accent-soft), transparent 70%);
+  animation: dbFloat 10s ease-in-out infinite;
+}
+
+.dashboard-shell::after {
+  bottom: -140px;
+  left: -120px;
+  background: radial-gradient(circle, var(--db-accent-soft), transparent 70%);
+  animation: dbFloat 12s ease-in-out infinite reverse;
+}
+
+.dashboard-container {
+  max-width: 1040px;
+  margin: 0 auto;
+  display: grid;
+  gap: 16px;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-loading {
+  max-width: 340px;
+  margin: 22vh auto 0;
+  padding: 18px 22px;
+  border-radius: 14px;
+  border: 1px solid var(--db-border);
+  background: var(--db-card-bg);
+  color: var(--db-heading);
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 18px 45px var(--db-accent-soft);
+  animation: dbPulse 1.6s ease-in-out infinite;
+}
+
+.dashboard-card {
+  background: var(--db-card-bg);
+  border: 1px solid var(--db-border);
+  border-radius: 16px;
+  box-shadow: 0 14px 34px var(--db-accent-soft);
+  backdrop-filter: blur(8px);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 45px var(--db-accent-soft);
+}
+
+.dashboard-hero {
+  padding: 22px;
+  animation: dbSlideIn 0.45s ease-out;
+}
+
+.dashboard-hero h1 {
+  margin: 0 0 8px;
+  color: var(--db-heading);
+  font-size: clamp(1.3rem, 2vw, 1.65rem);
+  letter-spacing: -0.2px;
+}
+
+.dashboard-hero p {
+  margin: 0;
+  color: var(--db-muted);
+  font-size: 0.96rem;
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.dashboard-stat-card {
+  padding: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-stat-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 0%, var(--db-accent-soft) 100%);
+  pointer-events: none;
+}
+
+.dashboard-stat-card p {
+  margin: 0 0 8px;
+  color: var(--db-muted);
+  font-size: 0.87rem;
+  font-weight: 600;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-stat-card h3 {
+  margin: 0;
+  color: var(--db-accent);
+  font-size: 1.65rem;
+  line-height: 1;
+  letter-spacing: -0.4px;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-card h2 {
+  margin: 0 0 14px;
+  color: var(--db-heading);
+  font-size: 1.2rem;
+}
+
+.dashboard-form {
+  padding: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.dashboard-form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.dashboard-form label {
+  display: grid;
+  gap: 6px;
+  color: var(--db-text);
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.dashboard-form input,
+.dashboard-form select,
+.dashboard-form textarea {
+  width: 100%;
+  border: 1px solid var(--db-border);
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 10px 12px;
+  color: var(--db-text);
+  font-size: 0.93rem;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-form input:focus,
+.dashboard-form select:focus,
+.dashboard-form textarea:focus {
+  border-color: var(--db-accent);
+  box-shadow: 0 0 0 3px var(--db-accent-soft);
+}
+
+.dashboard-form textarea {
+  resize: vertical;
+}
+
+.dashboard-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.dashboard-actions button {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--db-accent), color-mix(in srgb, var(--db-accent) 72%, #000 28%));
+  color: #ffffff;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 8px 22px var(--db-accent-soft);
+}
+
+.dashboard-actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.dashboard-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.msg-success {
+  color: #047857;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.msg-error {
+  color: #b91c1c;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.dashboard-card:last-child {
+  padding: 20px;
+}
+
+.dashboard-empty {
+  margin: 0;
+  color: var(--db-muted);
+}
+
+.dashboard-activity-list {
+  display: grid;
+  gap: 8px;
+}
+
+.dashboard-activity-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  border: 1px solid var(--db-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dashboard-activity-item span {
+  color: var(--db-text);
+  font-weight: 600;
+}
+
+.dashboard-activity-item time {
+  color: var(--db-muted);
+  font-size: 0.84rem;
+}
+
+.dashboard-liked-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.dashboard-liked-col {
+  border: 1px solid var(--db-border);
+  border-radius: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.dashboard-liked-col h3 {
+  margin: 0 0 8px;
+  color: var(--db-heading);
+  font-size: 1rem;
+}
+
+.dashboard-liked-col ul {
+  margin: 0;
+  padding-left: 18px;
+  display: grid;
+  gap: 6px;
+}
+
+.dashboard-liked-col li {
+  color: var(--db-text);
+  font-size: 0.9rem;
+}
+
+@keyframes dbFloat {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes dbSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dbPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.72;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-shell {
+    padding: 18px 10px;
+  }
+
+  .dashboard-hero,
+  .dashboard-form,
+  .dashboard-card:last-child {
+    padding: 14px;
+  }
+}

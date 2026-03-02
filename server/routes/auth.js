@@ -278,6 +278,38 @@ router.get('/activity', authenticateToken, async (req, res) => {
   }
 })
 
+// Add custom activity event
+router.post('/activity', authenticateToken, async (req, res) => {
+  try {
+    const { type, description, metadata } = req.body || {}
+    if (!description || typeof description !== 'string') {
+      return res.status(400).json({ error: 'Description is required' })
+    }
+
+    const users = await loadUsers()
+    const u = users[req.user.id]
+    if (!u) {
+      return res.status(404).json({ error: 'User not found' })
+    }
+
+    u.activity = u.activity || []
+    u.activity.push({
+      type: type || 'activity',
+      description: description.trim(),
+      metadata: metadata || {},
+      timestamp: new Date()
+    })
+
+    users[req.user.id] = u
+    await saveUsers(users)
+
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('Add activity error:', err)
+    res.status(500).json({ error: 'Server error' })
+  }
+})
+
 // Verify token and user
 router.post('/verify', authenticateToken, async (req, res) => {
   try {

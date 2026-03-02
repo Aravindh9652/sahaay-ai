@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 // Mock government schemes database with verified apply URLs
@@ -97,6 +97,41 @@ export default function CivicHub({ user }) {
   const [bookmarked, setBookmarked] = useState({})
   const [searchQuery, setSearchQuery] = useState('')
 
+  const getToken = () => {
+    try {
+      const raw = localStorage.getItem('sahaay_token')
+      const parsed = raw ? JSON.parse(raw) : null
+      return parsed?.token || null
+    } catch {
+      return null
+    }
+  }
+
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      const token = getToken()
+      if (!token) return
+
+      try {
+        const res = await fetch('/api/auth/bookmarks', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const data = await res.json()
+        if (!res.ok || !data?.bookmarks?.civic) return
+
+        const initial = {}
+        data.bookmarks.civic.forEach((id) => {
+          initial[id] = true
+        })
+        setBookmarked(initial)
+      } catch (error) {
+        console.error('Failed to load civic bookmarks:', error)
+      }
+    }
+
+    loadBookmarks()
+  }, [])
+
   const categories = ['All', ...new Set(civicInitiatives.map(init => init.category))]
   const likedCount = civicInitiatives.filter(init => bookmarked[init.id]).length
 
@@ -107,8 +142,67 @@ export default function CivicHub({ user }) {
     return matchCategory && matchLiked && matchSearch
   })
 
-  const toggleBookmark = (id) => {
-    setBookmarked(b => ({ ...b, [id]: !b[id] }))
+  const toggleBookmark = async (id) => {
+    const token = getToken()
+    const currentlyLiked = Boolean(bookmarked[id])
+
+    setBookmarked((previous) => ({ ...previous, [id]: !currentlyLiked }))
+
+    if (!token) return
+
+    try {
+      const response = await fetch('/api/auth/bookmarks', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'civic',
+          itemId: id,
+          action: currentlyLiked ? 'remove' : 'add'
+        })
+      })
+
+      if (!response.ok) {
+        setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      }
+    } catch (error) {
+      setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      console.error('Failed to update civic bookmark:', error)
+    }
+  }
+
+  const logActivity = async (payload) => {
+    const token = getToken()
+    if (!token) return
+
+    try {
+      await fetch('/api/auth/activity', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+    } catch (error) {
+      console.error('Failed to log civic activity:', error)
+    }
+  }
+
+  const handleApplyScheme = (initiative) => {
+    window.open(initiative.applyUrl, '_blank', 'noopener,noreferrer')
+    logActivity({
+      type: 'recent_access',
+      description: `Applied for scheme: ${initiative.name}`,
+      metadata: {
+        category: 'civic',
+        itemId: initiative.id,
+        itemTitle: initiative.name,
+        action: 'apply_scheme'
+      }
+    })
   }
 
   return (
@@ -410,8 +504,9 @@ export default function CivicHub({ user }) {
                 </div>
               </div>
 
-              <a href={selectedInitiative.applyUrl} target="_blank" rel="noopener noreferrer" style={{display: 'block', width: '100%', textDecoration: 'none'}}>
-                <button style={{
+              <button
+                onClick={() => handleApplyScheme(selectedInitiative)}
+                style={{
                   width: '100%',
                   padding: '12px 20px',
                   background: '#667eea',
@@ -423,10 +518,12 @@ export default function CivicHub({ user }) {
                   fontSize: '1rem',
                   transition: 'all 0.3s',
                   boxShadow: '0 4px 15px rgba(102, 126, 234, 0.3)'
-                }} onMouseEnter={(e) => e.target.style.background = '#5568d3'} onMouseLeave={(e) => e.target.style.background = '#667eea'}>
-                  Apply Now 🔗
-                </button>
-              </a>
+                }}
+                onMouseEnter={(e) => e.target.style.background = '#5568d3'}
+                onMouseLeave={(e) => e.target.style.background = '#667eea'}
+              >
+                Apply Now 🔗
+              </button>
             </div>
           </div>
         )}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useLanguage } from '../i18n/LanguageContext'
 
 const opportunities = [
@@ -21,16 +21,81 @@ export default function Market(){
   const [viewMode, setViewMode] = useState('grid')
   const [selectedOpp, setSelectedOpp] = useState(null)
 
+  const getToken = () => {
+    try {
+      const raw = localStorage.getItem('sahaay_token')
+      const parsed = raw ? JSON.parse(raw) : null
+      return parsed?.token || null
+    } catch {
+      return null
+    }
+  }
+
+  useEffect(() => {
+    const loadBookmarks = async () => {
+      const token = getToken()
+      if (!token) return
+
+      try {
+        const res = await fetch('/api/auth/bookmarks', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        const data = await res.json()
+        if (!res.ok || !data?.bookmarks?.market) return
+
+        const initial = {}
+        data.bookmarks.market.forEach((id) => {
+          initial[id] = true
+        })
+        setBookmarked(initial)
+      } catch (error) {
+        console.error('Failed to load market bookmarks:', error)
+      }
+    }
+
+    loadBookmarks()
+  }, [])
+
   const filtered = opportunities.filter(opp => {
-    const matchesStatus = filter === 'All' || opp.status === filter
+    const matchesStatus = filter === 'All' || filter === 'Liked' || opp.status === filter
+    const matchesLiked = filter !== 'Liked' || Boolean(bookmarked[opp.id])
     const matchesCategory = categoryFilter === 'All' || opp.category === categoryFilter
     const matchesSearch = opp.title.toLowerCase().includes(search.toLowerCase()) || 
                          opp.company.toLowerCase().includes(search.toLowerCase())
-    return matchesStatus && matchesCategory && matchesSearch
+    return matchesStatus && matchesLiked && matchesCategory && matchesSearch
   })
 
-  const toggleBookmark = (id) => {
-    setBookmarked(b => ({...b, [id]: !b[id]}))
+  const likedCount = opportunities.filter((opp) => bookmarked[opp.id]).length
+
+  const toggleBookmark = async (id) => {
+    const token = getToken()
+    const currentlyLiked = Boolean(bookmarked[id])
+
+    setBookmarked((previous) => ({ ...previous, [id]: !currentlyLiked }))
+
+    if (!token) return
+
+    try {
+      const response = await fetch('/api/auth/bookmarks', {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          type: 'market',
+          itemId: id,
+          action: currentlyLiked ? 'remove' : 'add'
+        })
+      })
+
+      if (!response.ok) {
+        setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      }
+    } catch (error) {
+      setBookmarked((previous) => ({ ...previous, [id]: currentlyLiked }))
+      console.error('Failed to update market bookmark:', error)
+    }
   }
 
   const getStatusColor = (status) => {
@@ -105,11 +170,30 @@ export default function Market(){
       }}></div>
 
       <div style={{maxWidth: '1400px', margin: '0 auto', position: 'relative', zIndex: 1}}>
+        <div style={{ position: 'absolute', top: '0', right: '0', zIndex: 2 }}>
+          <button
+            onClick={() => setFilter(filter === 'Liked' ? 'All' : 'Liked')}
+            style={{
+              padding: '10px 16px',
+              background: filter === 'Liked' ? '#ef4444' : '#fff',
+              color: filter === 'Liked' ? 'white' : '#ef4444',
+              border: '2px solid #ef4444',
+              borderRadius: '999px',
+              cursor: 'pointer',
+              fontWeight: '700',
+              fontSize: '0.95rem',
+              transition: 'all 0.3s'
+            }}
+          >
+            {filter === 'Liked' ? `❤️ Showing Liked (${likedCount})` : `🤍 Liked Opportunities (${likedCount})`}
+          </button>
+        </div>
 
         {/* Hero Section */}
         <div style={{
           animation: 'slideInDown 0.8s ease-out forwards',
-          marginBottom: '40px'
+          marginBottom: '40px',
+          marginTop: '56px'
         }}>
           <h1 style={{
             fontSize: '3.5rem',
@@ -120,7 +204,7 @@ export default function Market(){
             marginBottom: '16px',
             textAlign: 'center'
           }}>
-            🚀 {t('marketTitle') || 'Opportunities Hub'}
+             {t('marketTitle') || 'Opportunities Hub'}
           </h1>
           <p style={{
             fontSize: '1.2rem',
@@ -488,7 +572,9 @@ export default function Market(){
           }}>
             <div style={{fontSize: '48px', marginBottom: '16px'}}>🔍</div>
             <h3 style={{color: 'white', fontSize: '1.5rem', fontWeight: '700', marginBottom: '8px'}}>No opportunities found</h3>
-            <p style={{color: 'rgba(255,255,255,0.9)'}}>Try adjusting your search or filters</p>
+            <p style={{color: 'rgba(255,255,255,0.9)'}}>
+              {filter === 'Liked' ? 'No liked opportunities yet. Tap the heart icon on any item to save it here.' : 'Try adjusting your search or filters'}
+            </p>
           </div>
         )}
 
